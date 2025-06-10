@@ -18,6 +18,15 @@ June 2025
 		* Player is limited to not go into walls
 		* Player is blocked from going onto enemy tiles
 		* Angeled camera
+11/6	* Fixed Enemy movement towards player
+		* Added better tile coloring to fit theme
+		* Fixed so player targets the tiles correctly with tilted camera
+
+
+
+
+
+		// Still need to make enemy pathfinding
 
 
 		// Fix combat interactions

@@ -26,20 +26,25 @@ public class PlayerMovement : MonoBehaviour
         // Step 1: Get the mouse position in screen space
         Vector2 mouseScreenPosition = Mouse.current.position.ReadValue();
 
-        // Step 2: Convert to world space
-        Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(new Vector3(mouseScreenPosition.x, mouseScreenPosition.y, Camera.main.transform.position.y));
+        // Step 2: Create a ray from the camera through the mouse position
+        Ray ray = Camera.main.ScreenPointToRay(mouseScreenPosition);
 
-        mouseWorldPosition.y = 0; // Make sure we're on the same Z plane (for 2D)
+        // Step 3: Create a plane at y = 0 (the ground)
+        Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
 
-        // Show positione in game
-        MousePositionInGame.Instance.transform.position = mouseWorldPosition;
+        // Step 4: Find the point where the ray hits the ground plane
+        if (groundPlane.Raycast(ray, out float enter)) {
+            Vector3 mouseWorldPosition = ray.GetPoint(enter);
 
-        // Step 3: Calculate direction from player to mouse        
-        Vector3 lookDirection = mouseWorldPosition - transform.position;
+            // Show position in game
+            MousePositionInGame.Instance.transform.position = mouseWorldPosition;
 
+            // Step 5: Calculate direction from player to mouse
+            Vector3 lookDirection = mouseWorldPosition - transform.position;
 
-        // Step 4: Get angle and apply rotation
-        transform.rotation = Quaternion.LookRotation(lookDirection, Vector3.up);
+            // Step 6: Apply rotation
+            transform.rotation = Quaternion.LookRotation(lookDirection, Vector3.up);
+        }        
     }
 
     private void Turn(InputAction.CallbackContext context)

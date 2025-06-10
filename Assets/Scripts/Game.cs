@@ -54,4 +54,11 @@ public static class Convert
         else if (step.y - pos.y < -0.8f) return Vector2Int.down;
         else return Vector2Int.zero;
     }
+
+    internal static int Sign(int v)
+    {
+        if(v<=-1) return -1;
+        if(v>=1) return 1;
+        return 0;
+    }
 }
