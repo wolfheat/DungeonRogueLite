@@ -2,6 +2,21 @@ using UnityEngine;
 
 public class PlayerColliderController : MonoBehaviour
 {
+
+    [SerializeField] private LayerMask layerMaskWalls;
+    [SerializeField] private LayerMask layerMaskEnemies;
+
+    public static PlayerColliderController Instance { get; private set; }
+
+    private void Awake()
+    {
+        if (Instance != null) {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log("Player entered trigger "+other.name);
@@ -9,4 +24,15 @@ public class PlayerColliderController : MonoBehaviour
             Debug.Log("Exiting Dungeon");
         }
     }
+
+    public bool CheckForFreeSpot(Vector3 pos)
+    {
+        // Check for Walls
+        Collider[] colliders = Physics.OverlapBox(pos,new Vector3(0.4f,0.4f,0.4f),Quaternion.identity,layerMaskWalls);
+
+        Debug.Log("Colliders at this position "+ (colliders.Length > 0));
+
+        return colliders.Length > 0;
+    }
+
 }

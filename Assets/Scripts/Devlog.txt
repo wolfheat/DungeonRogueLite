@@ -12,18 +12,16 @@ June 2025
 10/6	* Color palette revealed
 		* Player movement implemented
 		* Camera follows above player
-		* PLayer aims at mouse and turns towards it
+		* Player aims at mouse and turns towards it
 		* Mouse tile position can now be shown - use later for targeting
 		* Player can collide with DungeonExits
+		* Player is limited to not go into walls
 
-
-		// Have player rotate towards mouse and only move in cardinal directions with WASD
-
-
-
-		// Fix a start dungeon after the grid with start end exit?
-
-		// Add player movement instant?
+		
+		// Make player unable to pass into enemies positions
+		// FIx combat interactions
+		
+		// Fix a start dungeon positioning
 
 
 

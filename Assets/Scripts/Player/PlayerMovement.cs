@@ -61,14 +61,21 @@ public class PlayerMovement : MonoBehaviour
 
     private void MovePlayer(Vector2 vector2)
     {
+
         Vector3 movement = Vector3.forward * vector2.y + Vector3.right * vector2.x;
         //Vector3 movement = transform.forward * vector2.y + transform.right * vector2.x;
 
-        // Instant movement
-        transform.position += movement;
+        // Instant movement to position
+        Vector3 movePosition = transform.position + movement;
+
+        // Check if move is legal
+        bool illegal = PlayerColliderController.Instance.CheckForFreeSpot(movePosition);
+
+        if (illegal) return;
+
 
         // Center
-        transform.position = Convert.Align(transform.position);
+        transform.position = Convert.Align(movePosition);
 
         CenterOverPlayer.Instance.Center(transform.position);
     }

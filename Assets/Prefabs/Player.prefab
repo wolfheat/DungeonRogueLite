@@ -124,6 +124,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40afc4ffd048a4e4eb8348bedddf01a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  layerMaskWalls:
+    serializedVersion: 2
+    m_Bits: 128
+  layerMaskEnemies:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &7799915125838107817
 MonoBehaviour:
   m_ObjectHideFlags: 0
