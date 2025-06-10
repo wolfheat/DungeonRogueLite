@@ -1,0 +1,62 @@
+Dungeon Generator Project 2025
+
+DEVLOG FOR Dungeon RogueLite Game
+MAYBE for Palette Lock Jam
+
+June 2025
+
+* IDEAS
+- Make a third person dungeon roguelike game with strict color panel from jam.
+
+ 9/6	* Project started
+10/6	* Color palette revealed
+		* Player movement implemented
+		* Camera follows above player
+		* PLayer aims at mouse and turns towards it
+		* Mouse tile position can now be shown - use later for targeting
+
+
+		// Have player rotate towards mouse and only move in cardinal directions with WASD
+
+
+
+		// Fix a start dungeon after the grid with start end exit?
+
+		// Add player movement instant?
+
+
+
+		// MUST HAVE
+		*	Gridbased Movement (instant or animated)?
+		*	Enemies movement - attack - deaths
+		*	Items dropped
+		*	Stats upgradable
+		*	Currency dropped - gold and long term
+		
+
+		// LIKE TO HAVE
+		* Random Generated dungeons
+
+
+
+		// PROB NOT
+
+
+
+
+		// Have developers able to set instant stairs?
+
+		// Implement doors?
+
+
+
+		* Make the changes for tilemaps code better
+		* Make changing rotation of stairs update the map correctly
+
+
+		// WANTS
+		// Make the new tilemap autoselect in hierachy so painting can be done on it directly
+
+
+
+		
