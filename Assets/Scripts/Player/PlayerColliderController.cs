@@ -5,6 +5,8 @@ public class PlayerColliderController : MonoBehaviour
 
     [SerializeField] private LayerMask layerMaskWalls;
     [SerializeField] private LayerMask layerMaskEnemies;
+    
+    private LayerMask blockedLayers;
 
     public static PlayerColliderController Instance { get; private set; }
 
@@ -15,6 +17,9 @@ public class PlayerColliderController : MonoBehaviour
             return;
         }
         Instance = this;
+
+
+        blockedLayers = layerMaskEnemies | layerMaskWalls;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -28,7 +33,7 @@ public class PlayerColliderController : MonoBehaviour
     public bool CheckForFreeSpot(Vector3 pos)
     {
         // Check for Walls
-        Collider[] colliders = Physics.OverlapBox(pos,new Vector3(0.4f,0.4f,0.4f),Quaternion.identity,layerMaskWalls);
+        Collider[] colliders = Physics.OverlapBox(pos,new Vector3(0.4f,0.4f,0.4f),Quaternion.identity, blockedLayers);
 
         Debug.Log("Colliders at this position "+ (colliders.Length > 0));
 

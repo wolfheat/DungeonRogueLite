@@ -16,11 +16,13 @@ June 2025
 		* Mouse tile position can now be shown - use later for targeting
 		* Player can collide with DungeonExits
 		* Player is limited to not go into walls
-
+		* Player is blocked from going onto enemy tiles
 		
 		// Make player unable to pass into enemies positions
-		// FIx combat interactions
+		// Fix combat interactions
 		
+		// Add timer for enemy movement in relation to player movement
+
 		// Fix a start dungeon positioning
 
 
