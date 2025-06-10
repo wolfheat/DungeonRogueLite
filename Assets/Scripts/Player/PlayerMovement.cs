@@ -9,14 +9,14 @@ public class PlayerMovement : MonoBehaviour
     {
         Inputs.Instance.PlayerControls.Player.Move.performed += Move;
         //Inputs.Instance.PlayerControls.Player.Turn.performed += Turn;
-        Inputs.Instance.PlayerControls.Player.SideStep.performed += SideStep;        
+        //Inputs.Instance.PlayerControls.Player.SideStep.performed += SideStep;        
     }
 
     private void OnDisable()
     {
         Inputs.Instance.PlayerControls.Player.Move.performed -= Move;
         //Inputs.Instance.PlayerControls.Player.Turn.performed -= Turn;
-        Inputs.Instance.PlayerControls.Player.SideStep.performed -= SideStep;        
+       // Inputs.Instance.PlayerControls.Player.SideStep.performed -= SideStep;        
     }
 
     private void Update() => LookAtMouse();

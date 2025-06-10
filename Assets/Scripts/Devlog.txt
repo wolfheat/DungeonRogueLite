@@ -14,6 +14,7 @@ June 2025
 		* Camera follows above player
 		* PLayer aims at mouse and turns towards it
 		* Mouse tile position can now be shown - use later for targeting
+		* Player can collide with DungeonExits
 
 
 		// Have player rotate towards mouse and only move in cardinal directions with WASD
