@@ -1,15 +1,27 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
-public class EnemyController : MonoBehaviour
+
+public interface IDamageable
+{
+    bool TakeDamage(int damage);
+
+}
+
+public class EnemyController : MonoBehaviour, IDamageable
 {
 
     private const int ActionSpeed = 1;
     private const int MovementSpeed = 2;
 
+    private int health = 100;
+    private int MaxHealth = 100;
 
     private int actionTimer = 0;    
     private int attackTimer = 0;
+
+    public bool IsDead { get; private set; }
 
     private void Start()
     {
@@ -107,4 +119,26 @@ public class EnemyController : MonoBehaviour
         return new Vector2Int();
     }
 
+    public bool TakeDamage(int damage)
+    {
+        Debug.Log("Enemy recieved "+damage+" damage.");
+        health -= damage;
+        if (health < 0) {
+            health = 0;
+            Debug.Log("Enemy Dies");
+            StartCoroutine(DeathCoroutine());
+            return true;
+        }
+        return false;
+    }
+
+    // Death Coroutine
+    private IEnumerator DeathCoroutine()
+    {
+        IsDead = true;
+        Debug.Log("Waiting 2 seconds to remove the enemy");
+        yield return new WaitForSeconds(2f);
+        Debug.Log("Removing the enemy");
+        Destroy(gameObject);
+    }
 }

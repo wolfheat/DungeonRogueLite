@@ -21,7 +21,14 @@ June 2025
 11/6	* Fixed Enemy movement towards player
 		* Added better tile coloring to fit theme
 		* Fixed so player targets the tiles correctly with tilted camera
+12/6	* Added SoundMaster and some soundeffects
 
+
+
+		// Add player HP bar above player ingame
+
+
+		JAM 9/6 - 15/6
 
 
 

@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Wolfheat.StartMenu;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -83,6 +84,8 @@ public class PlayerMovement : MonoBehaviour
         transform.position = Convert.Align(movePosition);
 
         CenterOverPlayer.Instance.Center(transform.position);
+
+        SoundMaster.Instance.PlayStepSound(3);
     }
 
     private void SideStep(InputAction.CallbackContext context)

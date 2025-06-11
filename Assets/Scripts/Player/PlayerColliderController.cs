@@ -1,4 +1,5 @@
 using UnityEngine;
+using Wolfheat.StartMenu;
 
 public class PlayerColliderController : MonoBehaviour
 {
@@ -27,6 +28,8 @@ public class PlayerColliderController : MonoBehaviour
         //Debug.Log("Player entered trigger "+other.name);
         if(other.TryGetComponent(out DungeonExit dungeonExit)) {
             Debug.Log("Exiting Dungeon");
+            SoundMaster.Instance.PlaySound(SoundName.ExitStairReached);
+            Stats.Instance.NextDungeonLevel();
         }
     }
 

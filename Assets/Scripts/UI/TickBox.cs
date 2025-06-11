@@ -7,7 +7,6 @@ public class TickBox : MonoBehaviour
 
     public void SetActive(bool setToActive)
     {
-        Debug.Log("Setting box active: "+setToActive+" "+name);
         active.SetActive(setToActive);
         inActive.SetActive(!setToActive);
     }
