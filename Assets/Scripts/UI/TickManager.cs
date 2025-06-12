@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -33,11 +34,21 @@ public class TickManager : MonoBehaviour
 
     }
 
-    private void TickRequested(InputAction.CallbackContext context)
+    public void TickRequest()
     {
+        // DelayTick one frame?
+        StartCoroutine(DelayTick());
+    }
+
+    private IEnumerator DelayTick()
+    {
+        yield return new WaitForSecondsRealtime(Time.fixedDeltaTime);
+        //yield return new WaitForSeconds(0.05f);
         Tick();
         TickGame?.Invoke();
     }
+
+    private void TickRequested(InputAction.CallbackContext context) => TickRequest();
 
     private void GenerateTickBoxes()
     {

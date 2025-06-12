@@ -467,7 +467,7 @@ namespace Wolfheat.StartMenu
 
         public void PlayWeaponHitEnemy()
         {
-            Debug.Log("Play Sound layer hit enemy");
+            //Debug.Log("Play Sound layer hit enemy");
             audioSource.PlayOneShot(playerHitWithSword[Random.Range(0, playerHitWithSword.Length)]);
             //PlaySound(SoundName.HitEnemy);
         }

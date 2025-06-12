@@ -25,7 +25,7 @@ public class PlayerInteract : MonoBehaviour
         float distanceX = Mathf.Abs(transform.position.x-tileSelector.transform.position.x);
         float distanceY = Mathf.Abs(transform.position.z-tileSelector.transform.position.z);
         int totDistance = Mathf.RoundToInt(distanceX+distanceY);
-
+        float directDistance = Mathf.Sqrt(distanceX*distanceX+distanceY*distanceY);
 
         // Get Enemy at this position
         Collider[] colliders = Physics.OverlapBox(tileSelector.transform.position, overlapExtent, Quaternion.identity, enemyLayerMask);
@@ -42,23 +42,27 @@ public class PlayerInteract : MonoBehaviour
             return;
         }
 
-        Debug.Log("Distance from player "+totDistance);
+        //Debug.Log("Distance from player "+totDistance);
 
-        if(totDistance < 5 && totDistance > 1)
-            Debug.Log("Can Attack with Bow");
-        else if(totDistance <= 1) {
-            Debug.Log("Can Attack with Melee");
+        if(directDistance < Stats.Instance.BowReach && directDistance > 1.5)
+            Debug.Log("Bow Attack");
+        else if(directDistance <= Stats.Instance.SwordReach) {
 
             if (enemy.IsDead)
                 return;
 
+            Debug.Log("Melee Attack");
+
             // Do attack the enmy if there is one here
             if (enemy.TakeDamage(8)) {
                 SoundMaster.Instance.PlaySound(SoundName.EnemyDie);
-                Stats.Instance.AddEnemyKilled();
+                Stats.Instance.AddEnemyKilled(enemy.Data.XP);
             }
             else
                 SoundMaster.Instance.PlayWeaponHitEnemy();
+
+            // Have player action end call a tick
+            TickManager.Instance.TickRequest();
         }
         else {
             Debug.Log("To far to Attack");            

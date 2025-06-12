@@ -86,6 +86,9 @@ public class PlayerMovement : MonoBehaviour
         CenterOverPlayer.Instance.Center(transform.position);
 
         SoundMaster.Instance.PlayStepSound(3);
+
+        // Have player action end call a tick
+        TickManager.Instance.TickRequest();
     }
 
     private void SideStep(InputAction.CallbackContext context)

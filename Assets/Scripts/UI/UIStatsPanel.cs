@@ -8,6 +8,7 @@ public class UIStatsPanel : MonoBehaviour
     [SerializeField] private TextMeshProUGUI levelInfo;
     [SerializeField] private TextMeshProUGUI dungeonLevelInfo;
     [SerializeField] private TextMeshProUGUI enemiesKilled;
+    [SerializeField] private TextMeshProUGUI experience;
 
     private void Start()
     {
@@ -23,6 +24,7 @@ public class UIStatsPanel : MonoBehaviour
         levelInfo.text = "Level: " + Stats.Instance.Level;
         dungeonLevelInfo.text = "Dungeon: " + Stats.Instance.DungeonLevel;
         enemiesKilled.text = "Kills: " + Stats.Instance.EnemiesKilled;
+        experience.text = "XP: " + Stats.Instance.XP;
     }
 
 

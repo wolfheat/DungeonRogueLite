@@ -179,3 +179,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce3eda4ad10c2fa4384db1aacd3bf0be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  data: {fileID: 11400000, guid: 086b9e3ff5fc95a42a622b550b84aba1, type: 2}
+  playerMask:
+    serializedVersion: 2
+    m_Bits: 8
+  wallMask:
+    serializedVersion: 2
+    m_Bits: 128
+  visionMask:
+    serializedVersion: 2
+    m_Bits: 0
