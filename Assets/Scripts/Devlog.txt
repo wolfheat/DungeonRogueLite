@@ -24,20 +24,21 @@ June 2025
 12/6	* Added SoundMaster and some soundeffects
 		* Implemented A* for enemies
 		* Enemies can now attack player
-
-
-
-
-		// Enemy Pathfinding
+		* Added inventory bar and healthbar
 
 		// Fix color Palette for Characters
 
 		// Add player HP bar above player ingame
-		// Still need to make enemy pathfinding
-		// Fix combat interactions
+
+		// Player take damage from enemies
+		// Limit player to floor tiles
+
+		// Visualize damage dealt
 
 		// Character Animations?
+
 		// Menu System
+
 		// Upgrade System
 
 		JAM 9/6 - 15/6
