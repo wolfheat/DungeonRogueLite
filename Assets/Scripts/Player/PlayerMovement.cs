@@ -6,11 +6,35 @@ using Wolfheat.StartMenu;
 public class PlayerMovement : MonoBehaviour
 {
 
+    public static PlayerMovement Instance { get; private set; }
+
+    private void Awake()
+    {
+        if (Instance != null) {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+    }
+
     private void Start()
     {
         Inputs.Instance.PlayerControls.Player.Move.performed += Move;
         //Inputs.Instance.PlayerControls.Player.Turn.performed += Turn;
-        //Inputs.Instance.PlayerControls.Player.SideStep.performed += SideStep;        
+        //Inputs.Instance.PlayerControls.Player.SideStep.performed += SideStep;
+
+
+        ReturnToStartPosition();
+    }
+
+    public void ReturnToStartPosition()
+    {
+        // Find starter
+        Vector3 startposition = FindFirstObjectByType<StartPosition>().transform.position;
+
+        transform.position = Convert.Align(startposition);
+
+        CenterOverPlayer.Instance.Center(transform.position);
     }
 
     private void OnDisable()

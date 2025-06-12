@@ -12,13 +12,13 @@ public class UIStatsPanel : MonoBehaviour
 
     private void Start()
     {
-        UpdateAllInfo();
+        UpdateInfo();
     }
-    private void OnEnable() => Stats.StatsUpdated += UpdateAllInfo;
+    private void OnEnable() => Stats.StatsUpdated += UpdateInfo;
 
-    private void OnDisable() => Stats.StatsUpdated -= UpdateAllInfo;
+    private void OnDisable() => Stats.StatsUpdated -= UpdateInfo;
 
-    public void UpdateAllInfo()
+    public void UpdateInfo()
     {
         healthInfo.text = "HP: " + Stats.Instance.Health+"/"+Stats.Instance.MaxHealth;
         levelInfo.text = "Level: " + Stats.Instance.Level;

@@ -25,6 +25,8 @@ June 2025
 		* Implemented A* for enemies
 		* Enemies can now attack player
 		* Added inventory bar and healthbar
+		* Added Character selection panel
+		* Added Pixel art Icons for characters
 
 		// Fix color Palette for Characters
 

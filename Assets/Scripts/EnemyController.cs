@@ -73,7 +73,8 @@ public class EnemyController : MonoBehaviour, IDamageable
         // If to far away move closer to player
 
         if (EvaluateDistanceToPlayer()) {
-            Debug.Log("Enemy attacking player!");
+            Debug.Log("Enemy attacking player! DMG:"+data.Damage);
+            Stats.Instance.TakeDamage(data.Damage);
             // Face Player ?
         }
 
