@@ -45,6 +45,8 @@ public class PlayerInteract : MonoBehaviour
             // If holding a bow or staff
             if (InventoryController.Instance.EquippedRangedWeapon()) {
                 Debug.Log("Bow Attack");
+                
+                PlayerAnimation.Instance.PlayAnimation(AnimationType.AttackBow);
 
                 // Do attack the enemy if there is one here
                 if (enemy.TakeDamage(Stats.Instance.RangeDamage)) {
@@ -63,6 +65,9 @@ public class PlayerInteract : MonoBehaviour
         else if(directDistance <= Stats.Instance.SwordReach) {
 
             Debug.Log("Melee Attack");
+
+            PlayerAnimation.Instance.PlayAnimation(AnimationType.Attack1h);
+
             // Do attack the enmy if there is one here
             if (enemy.TakeDamage(Stats.Instance.MeleeDamage)) {
                 SoundMaster.Instance.PlaySound(SoundName.EnemyDie);

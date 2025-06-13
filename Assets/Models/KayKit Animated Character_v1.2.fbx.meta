@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 19220d9b1c144264ba483eb5e3f91a9f
+guid: 9f4e4e1ff23c46643babf2db3ef952c2
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -22,7 +22,7 @@ ModelImporter:
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
     importConstraints: 0
-    animationCompression: 3
+    animationCompression: 1
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
@@ -80,37 +80,7 @@ ModelImporter:
   humanDescription:
     serializedVersion: 3
     human: []
-    skeleton:
-    - name: character_knight(Clone)
-      parentName: 
-      position: {x: -0, y: 0, z: 0}
-      rotation: {x: 0.00000008146034, y: 0, z: -0, w: 1}
-      scale: {x: 1, y: 1, z: 1}
-    - name: character_knightHead
-      parentName: character_knight(Clone)
-      position: {x: -0, y: 0.70371246, z: -0.00000026490315}
-      rotation: {x: -0.00000011920929, y: 0, z: -0, w: 1}
-      scale: {x: 0.99999994, y: 1, z: 0.99999994}
-    - name: character_knightHelmet
-      parentName: character_knightHead
-      position: {x: -0, y: 0.5334738, z: 0.000000063339485}
-      rotation: {x: -0.00000011920929, y: 0, z: -0, w: 1}
-      scale: {x: 0.99999994, y: 1, z: 0.99999994}
-    - name: character_knightHelmetVisor
-      parentName: character_knightHelmet
-      position: {x: -0, y: 0.31044683, z: 0.049765613}
-      rotation: {x: -0.0000001192093, y: 0, z: -0, w: 1}
-      scale: {x: 0.9999998, y: 1, z: 0.9999998}
-    - name: character_knightArmLeft
-      parentName: character_knight(Clone)
-      position: {x: -0.20404434, y: 0.63355637, z: -0.00000011253269}
-      rotation: {x: -0.00000011920929, y: 0, z: -0, w: 1}
-      scale: {x: 1, y: 1, z: 1}
-    - name: character_knightArmRight
-      parentName: character_knight(Clone)
-      position: {x: 0.20404434, y: 0.63355637, z: -0.00000011253269}
-      rotation: {x: -0.00000011920929, y: 0, z: -0, w: 1}
-      scale: {x: 1, y: 1, z: 1}
+    skeleton: []
     armTwist: 0.5
     foreArmTwist: 0.5
     upperLegTwist: 0.5

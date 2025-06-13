@@ -32,14 +32,15 @@ June 2025
 13/6	* Upgrade Panel added
 		* Upgrade panel loads correctly
 		* Upgrades now apply correctly
-
+		* Character info added the classes
+		* Inventory added proper with character stats moved here, character equip and storage
 
 
 
 
 		// Fix color Palette for Characters
 
-		// Add player HP bar above player ingame
+		// Add enemy HP bar above characters ingame	
 
 		// Limit player to floor tiles
 
