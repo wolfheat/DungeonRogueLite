@@ -40,6 +40,7 @@ public class UICharacterPanel : MonoBehaviour
         Debug.Log("** Updating XP BAR");
         // Update XP bar
         xpBar.SetBar(Stats.Instance.XP, Stats.Instance.CurrentMaxXP);
+        SetCharacterLevel(Stats.Instance.Level);
     }
     private void CharacterUpdated()
     {

@@ -5,6 +5,18 @@ using UnityEngine.InputSystem;
 public class InventoryController : MonoBehaviour
 {
 
+    public static InventoryController Instance { get; private set; }
+
+    private void Awake()
+    {
+        if (Instance != null) {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+    }
+
+
     private void Start()
     {
         Inputs.Instance.PlayerControls.Player.One.performed += ItemOne;
@@ -29,5 +41,11 @@ public class InventoryController : MonoBehaviour
     private void UseItem(int itemIndex)
     {
         Debug.Log("Using item "+itemIndex);
+    }
+
+    internal bool EquippedRangedWeapon()
+    {
+        Debug.Log("Checking if player has a ranged weapon equipped");
+        return true;
     }
 }

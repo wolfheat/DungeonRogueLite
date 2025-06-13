@@ -12,4 +12,5 @@ public class CharacterClassData : ScriptableObject
     public int SightDistance;
     public int AttackSpeed;
     public float AttackDistance;
+    public string Information = "Information about the character";
 }

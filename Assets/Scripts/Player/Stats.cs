@@ -14,8 +14,9 @@ public class Stats : MonoBehaviour,IDamageable
     public int Willpower { get; private set; } = 10;
 
     public int Health { get; private set; } = 100;
+
     public int MaxHealth { get; private set; } = 100;
- 
+    
     public int MP { get; private set; } = 100;
     public int MaxMP { get; private set; } = 100;
     public int AvailableUpgradePoints { get; private set; } = 4;
@@ -38,6 +39,10 @@ public class Stats : MonoBehaviour,IDamageable
     public CharacterClassData ActiveCharacter { get; internal set; }
 
     public int CurrentMaxXP => (int)XPCurve.Evaluate((float)Level);
+
+    public int MeleeDamage => BaseDamage + (int)(Strength*0.8f);
+    public int RangeDamage => BaseDamage + (int)(Intelligence*0.8f);
+
 
     public static Action StatsUpdated;
     public static Action CharacterUpdated;
@@ -141,5 +146,27 @@ public class Stats : MonoBehaviour,IDamageable
         Debug.Log("Applying " + upgrades[1]+" points to Stamina");
         Debug.Log("Applying " + upgrades[2]+" points to Intelligence");
         Debug.Log("Applying " + upgrades[3]+" points to Willpower");
+
+        Strength += upgrades[0];
+
+        Stamina += upgrades[1];
+
+        Intelligence += upgrades[2];
+
+        Willpower += upgrades[3];
+
+        // 1 Strength = 1 Strength
+        // 1 Stamina = 5 Health
+        // 1 Intelligence = 1 Range Damage
+        // 1 Willpower = 5 Mana
+
+        UpdateMaxHPandMP();
+    }
+
+    private void UpdateMaxHPandMP()
+    {
+        MaxHealth = ActiveCharacter.BaseMaxHealth + Stamina * 5;
+        MaxMP = ActiveCharacter.BaseMaxMP + Intelligence * 5;
+        StatsUpdated?.Invoke();
     }
 }

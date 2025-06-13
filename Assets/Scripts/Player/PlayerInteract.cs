@@ -37,24 +37,34 @@ public class PlayerInteract : MonoBehaviour
         EnemyController enemy = colliders.Where(x => x.GetComponent<EnemyController>() != null).FirstOrDefault()?.GetComponent<EnemyController>();
 
 
-        if (enemy == null) {
-            //Debug.Log("NO ENEMY HERE");
+        if (enemy == null || enemy.IsDead) {
             return;
         }
 
-        //Debug.Log("Distance from player "+totDistance);
+        if(directDistance < Stats.Instance.BowReach && directDistance > 1.5) {
+            // If holding a bow or staff
+            if (InventoryController.Instance.EquippedRangedWeapon()) {
+                Debug.Log("Bow Attack");
 
-        if(directDistance < Stats.Instance.BowReach && directDistance > 1.5)
-            Debug.Log("Bow Attack");
+                // Do attack the enemy if there is one here
+                if (enemy.TakeDamage(Stats.Instance.RangeDamage)) {
+                    SoundMaster.Instance.PlaySound(SoundName.EnemyDie);
+                    Stats.Instance.AddEnemyKilled(enemy.Data.XP);
+                }
+                else {
+                    // Change this to sound for ranged damage
+                    SoundMaster.Instance.PlayWeaponHitEnemy();
+                }
+
+                // Have player action end call a tick
+                TickManager.Instance.TickRequest();
+            }
+        }
         else if(directDistance <= Stats.Instance.SwordReach) {
 
-            if (enemy.IsDead)
-                return;
-
             Debug.Log("Melee Attack");
-
             // Do attack the enmy if there is one here
-            if (enemy.TakeDamage(8)) {
+            if (enemy.TakeDamage(Stats.Instance.MeleeDamage)) {
                 SoundMaster.Instance.PlaySound(SoundName.EnemyDie);
                 Stats.Instance.AddEnemyKilled(enemy.Data.XP);
             }

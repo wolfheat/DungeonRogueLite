@@ -1,6 +1,7 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UpgradePanelController : MonoBehaviour
 {
@@ -9,6 +10,9 @@ public class UpgradePanelController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI intelligence;
     [SerializeField] private TextMeshProUGUI willpower;
     [SerializeField] private TextMeshProUGUI availablePointsText;
+
+    [SerializeField] private Image image;
+    [SerializeField] private TextMeshProUGUI characterType;
 
     [SerializeField] private GameObject[] plusses;
     [SerializeField] private GameObject[] minuses;
@@ -29,11 +33,23 @@ public class UpgradePanelController : MonoBehaviour
     private void OnEnable()
     {
         Debug.Log("Upgrade panel Enabled - Update");
-        availablePoints = Stats.Instance.AvailableUpgradePoints;
-        HideAllMinus();
-        UpdatePanel();
+
+        InitPanel();
+
     }
 
+    private void InitPanel()
+    {
+        availablePoints = Stats.Instance.AvailableUpgradePoints;
+
+        // Update the image and type
+        characterType.text = Stats.Instance.ActiveCharacter?.CharacterType.ToString();
+        image.sprite = Stats.Instance.ActiveCharacter?.Picture;
+
+        Debug.Log("Hide Minuses");
+        HideAllMinuses();
+        UpdatePanel();
+    }
 
     public void RequestRemovePointAt(int index)
     {
@@ -74,7 +90,7 @@ public class UpgradePanelController : MonoBehaviour
         HidePlusses();
     }
 
-    private void HideAllMinus()
+    private void HideAllMinuses()
     {
         foreach (var minus in minuses) {
             minus.gameObject.SetActive(false);

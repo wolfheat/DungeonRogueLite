@@ -21,3 +21,4 @@ MonoBehaviour:
   SightDistance: 8
   AttackSpeed: 1
   AttackDistance: 1
+  Information: Paladins start with higher base melee damage and higher health.

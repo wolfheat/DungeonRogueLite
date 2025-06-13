@@ -30,7 +30,12 @@ June 2025
 		* Updated Texts for UI
 		* Character Data added
 13/6	* Upgrade Panel added
-		
+		* Upgrade panel loads correctly
+		* Upgrades now apply correctly
+
+
+
+
 
 		// Fix color Palette for Characters
 
@@ -44,8 +49,8 @@ June 2025
 
 		// Menu System
 
-		// Upgrade System
 
+		
 		JAM 9/6 - 15/6
 
 		
