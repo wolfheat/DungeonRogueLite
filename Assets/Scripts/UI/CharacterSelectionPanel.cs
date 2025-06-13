@@ -1,5 +1,5 @@
 using UnityEngine;
-public enum CharacterType{Fighter,Paladin,Ranger,Thief, Wizard}
+public enum CharacterType{Fighter,Paladin,Ranger,Thief,Wizard}
 
 public class CharacterSelectionPanel : MonoBehaviour
 {

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: RangerData
   m_EditorClassIdentifier: 
   Picture: {fileID: 21300000, guid: 04e5fc21369acd744b15e225ad43bc9c, type: 3}
-  CharacterType: 0
+  CharacterType: 2
   BaseMaxHealth: 80
   BaseMaxMP: 80
   BaseDamage: 1

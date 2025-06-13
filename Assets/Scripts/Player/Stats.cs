@@ -57,7 +57,9 @@ public class Stats : MonoBehaviour,IDamageable
 
     public bool TakeDamage(int damage)
     {
+        Debug.Log("Taking damage health was "+Health + "/" + MaxHealth);
         Health -= damage;
+        Debug.Log("Taking damage health becomes "+Health+"/"+MaxHealth);
         if (Health < 0) {
             Health = 0;
             StatsUpdated?.Invoke();

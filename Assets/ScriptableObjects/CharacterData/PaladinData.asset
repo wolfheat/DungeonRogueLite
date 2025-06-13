@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PaladinData
   m_EditorClassIdentifier: 
   Picture: {fileID: 21300000, guid: 4d148927f3a935a45910a121f28d5956, type: 3}
-  CharacterType: 0
+  CharacterType: 1
   BaseMaxHealth: 150
   BaseMaxMP: 100
   BaseDamage: 1

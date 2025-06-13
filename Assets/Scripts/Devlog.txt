@@ -27,12 +27,14 @@ June 2025
 		* Added inventory bar and healthbar
 		* Added Character selection panel
 		* Added Pixel art Icons for characters
+		* Updated Texts for UI
+		* Character Data added
+
 
 		// Fix color Palette for Characters
 
 		// Add player HP bar above player ingame
 
-		// Player take damage from enemies
 		// Limit player to floor tiles
 
 		// Visualize damage dealt

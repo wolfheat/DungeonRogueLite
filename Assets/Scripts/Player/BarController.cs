@@ -21,10 +21,10 @@ public class BarController : MonoBehaviour
 
     public void SetBar(int value, float MaxValue)
     {
-        float percent = value / MaxValue;
+        float percent = value / (float)MaxValue;
         
-        text.text = (percent*100).ToString("F2")+"%";
-        text.text = value.ToString();
+        //text.text = (percent*100).ToString("F2")+"/"+MaxValue;
+        text.text = value + "/" + MaxValue;
         bar.sizeDelta = new Vector2(-Barwidth * (1 - percent), 0);
         //bar.sizeDelta = new Vector2(-Barwidth * (1 - value), 0);
         //Debug.Log("Bar = "+bar.sizeDelta.x);
