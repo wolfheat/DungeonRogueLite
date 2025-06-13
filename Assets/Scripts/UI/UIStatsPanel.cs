@@ -24,7 +24,7 @@ public class UIStatsPanel : MonoBehaviour
         levelInfo.text = "Level: " + Stats.Instance.Level;
         dungeonLevelInfo.text = "Dungeon: " + Stats.Instance.DungeonLevel;
         enemiesKilled.text = "Kills: " + Stats.Instance.EnemiesKilled;
-        experience.text = "XP: " + Stats.Instance.XP;
+        experience.text = "XP: " + Stats.Instance.XP + "/" + Stats.Instance.CurrentMaxXP;
     }
 
 

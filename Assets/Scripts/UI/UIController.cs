@@ -5,6 +5,7 @@ public class UIController : MonoBehaviour
 {
 
     [SerializeField] private GameObject deathPanel;
+    [SerializeField] private GameObject upgradePanel;
 
 
     public static UIController Instance { get; private set; }
@@ -33,5 +34,10 @@ public class UIController : MonoBehaviour
     internal void StartGame()
     {
         Debug.Log("Startiong game");
+    }
+
+    internal void ShowLevelUpPanel()
+    {
+        upgradePanel.SetActive(true);
     }
 }

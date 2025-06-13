@@ -29,7 +29,8 @@ June 2025
 		* Added Pixel art Icons for characters
 		* Updated Texts for UI
 		* Character Data added
-
+13/6	* Upgrade Panel added
+		
 
 		// Fix color Palette for Characters
 

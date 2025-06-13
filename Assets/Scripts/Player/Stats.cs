@@ -1,13 +1,24 @@
 using System;
+using TMPro;
 using UnityEngine;
 
 public class Stats : MonoBehaviour,IDamageable
 {
+    public const int UpgradePointsPerLevel = 4;
+
+    public AnimationCurve XPCurve;
+
+    public int Strength { get; private set; } = 10;
+    public int Stamina { get; private set; } = 10;
+    public int Intelligence { get; private set; } = 10;
+    public int Willpower { get; private set; } = 10;
+
     public int Health { get; private set; } = 100;
     public int MaxHealth { get; private set; } = 100;
  
     public int MP { get; private set; } = 100;
     public int MaxMP { get; private set; } = 100;
+    public int AvailableUpgradePoints { get; private set; } = 4;
 
     public int Level { get; private set; } = 1;
     public int DungeonLevel { get; private set; } = 1;
@@ -24,8 +35,12 @@ public class Stats : MonoBehaviour,IDamageable
     public float BowReach { get; internal set; } = 8f;
     public float SwordReach { get; internal set; } = 1.42f;
     public int XP { get; internal set; } = 0;
+    public CharacterClassData ActiveCharacter { get; internal set; }
+
+    public int CurrentMaxXP => (int)XPCurve.Evaluate((float)Level);
 
     public static Action StatsUpdated;
+    public static Action CharacterUpdated;
 
     private void Awake()
     {
@@ -38,8 +53,17 @@ public class Stats : MonoBehaviour,IDamageable
 
     public void AddEnemyKilled(int experience = 0)
     {
-        XP += experience;
+
         EnemiesKilled++;
+
+        XP += experience;
+        if(XP >= CurrentMaxXP) {
+            XP -= CurrentMaxXP;
+            Level++;
+            AvailableUpgradePoints += UpgradePointsPerLevel;
+            UIController.Instance.ShowLevelUpPanel();
+        }
+
         StatsUpdated?.Invoke();
     }
 
@@ -87,21 +111,35 @@ public class Stats : MonoBehaviour,IDamageable
 
     internal void ChangeCharacterData(CharacterClassData characterClassData)
     {
-        Debug.Log("Updating Stats with character data: "+characterClassData.name);
-        MaxHealth = characterClassData.BaseMaxHealth;
+        ActiveCharacter = characterClassData;
+
+        UpdateCharacterClassData();
+
+        CharacterUpdated?.Invoke();
+        StatsUpdated?.Invoke();
+    }
+
+    private void UpdateCharacterClassData()
+    {
+        Debug.Log("Updating Stats with character data: "+ ActiveCharacter.name);
+        MaxHealth = ActiveCharacter.BaseMaxHealth;
         Health = MaxHealth;
-        MaxMP = characterClassData.BaseMaxMP;
+        MaxMP = ActiveCharacter.BaseMaxMP;
         MP = MaxMP;
-        BaseDamage = characterClassData.BaseDamage;
-        MovementSpeed = characterClassData.MovementSpeed;
-        SightDistance = characterClassData.SightDistance;
-        AttackSpeed = characterClassData.AttackSpeed;
-        AttackDistance = characterClassData.AttackDistance;
+        BaseDamage = ActiveCharacter.BaseDamage;
+        MovementSpeed = ActiveCharacter.MovementSpeed;
+        SightDistance = ActiveCharacter.SightDistance;
+        AttackSpeed = ActiveCharacter.AttackSpeed;
+        AttackDistance = ActiveCharacter.AttackDistance;
         Debug.Log("Health: "+MaxHealth+" MP:"+MaxMP+ " BaseDamage:" + BaseDamage + " MovementSpeed:" + MovementSpeed + " SightDistance:" + SightDistance + " AttackSpeed:" + AttackSpeed + " AttackDistance:" + AttackDistance);
 
-        UICharacterPanel.Instance.SetCharacterName(characterClassData.CharacterType.ToString());
-        UICharacterPanel.Instance.SetCharacterIcon(characterClassData.Picture);
-        UICharacterPanel.Instance.SetCharacterLevel(Level);
-        StatsUpdated?.Invoke();
+    }
+
+    internal void ApplyUpgradePoints(int[] upgrades)
+    {
+        Debug.Log("Applying " + upgrades[0]+" points to Strength");
+        Debug.Log("Applying " + upgrades[1]+" points to Stamina");
+        Debug.Log("Applying " + upgrades[2]+" points to Intelligence");
+        Debug.Log("Applying " + upgrades[3]+" points to Willpower");
     }
 }

@@ -9,6 +9,7 @@ public class UICharacterPanel : MonoBehaviour
     [SerializeField] private TextMeshProUGUI characterName;
     [SerializeField] private TextMeshProUGUI coinsAmount;
     [SerializeField] private TextMeshProUGUI characterLevel;
+    [SerializeField] private BarController xpBar;
     [SerializeField] private Image image;
 
 
@@ -23,7 +24,36 @@ public class UICharacterPanel : MonoBehaviour
         Instance = this;
     }
 
+    private void Start()
+    {
+        Stats.CharacterUpdated += CharacterUpdated;
+        Stats.StatsUpdated += StatsUpdated;
+    }
+    private void OnDisable()
+    {
+        Stats.CharacterUpdated -= CharacterUpdated;
+        Stats.StatsUpdated -= StatsUpdated;
+    }
 
+    private void StatsUpdated()
+    {
+        Debug.Log("** Updating XP BAR");
+        // Update XP bar
+        xpBar.SetBar(Stats.Instance.XP, Stats.Instance.CurrentMaxXP);
+    }
+    private void CharacterUpdated()
+    {
+        
+        // Update Text Level and images
+        SetCharacterName(Stats.Instance.ActiveCharacter.CharacterType.ToString());
+        SetCharacterIcon(Stats.Instance.ActiveCharacter.Picture);
+        SetCharacterLevel(Stats.Instance.Level);
+
+        // Update XP bar
+        xpBar.SetBar(Stats.Instance.XP,Stats.Instance.CurrentMaxXP);
+    }
+
+    public void SetXP(string newName) => characterName.text = newName;
     public void SetCharacterName(string newName) => characterName.text = newName;
     public void SetCharacterLevel(int level) => characterLevel.text = level.ToString();
 
