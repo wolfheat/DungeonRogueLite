@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-
 public class WorldItem : MonoBehaviour
 {
     [SerializeField] private SpriteRenderer spriteRenderer;

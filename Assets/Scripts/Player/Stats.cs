@@ -96,6 +96,9 @@ public class Stats : MonoBehaviour,IDamageable
     {
         Debug.Log("Taking damage health was "+Health + "/" + MaxHealth);
         Health -= damage;
+
+        ItemSpawner.Instance.SpawnWorldDamage(damage,PlayerColliderController.Instance.transform.position);
+
         Debug.Log("Taking damage health becomes "+Health+"/"+MaxHealth);
         if (Health < 0) {
             Health = 0;

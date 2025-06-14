@@ -41,11 +41,11 @@ June 2025
 		* Enemy Healthbars showing in game
 		* Update of the Inventory layout
 		* Player limited to only walk on floors
+		* Added Damage number indicators
+
 
 
 		// Fix color Palette for Characters
-
-		// Limit player to floor tiles
 
 		// Visualize damage dealt
 

@@ -5332,6 +5332,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2355473649989199504, guid: c464e5afe6890d54bb733a69ec3e6ce9, type: 3}
   m_PrefabInstance: {fileID: 1042041724}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &322672725
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 322672726}
+  m_Layer: 0
+  m_Name: Damages
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &322672726
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 322672725}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -2.3918812, y: 6.1389756, z: -7.6472}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1519269927}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &323808885
 GameObject:
   m_ObjectHideFlags: 0
@@ -13822,7 +13853,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemHolder: {fileID: 893190491}
+  damgesHolder: {fileID: 322672726}
   worldItemPrefab: {fileID: 1619095497491008361, guid: ce8bab547db13e6438ea643c5f45547e, type: 3}
+  worldDamagePrefab: {fileID: 8672054158051524064, guid: f743d0d16ca1d5f4a9957ccd6c80ac79, type: 3}
   UIItemPrefab: {fileID: 1224299470469361109, guid: 1b359fdf58dec054f91ed226a2ce3097, type: 3}
 --- !u!1001 &935696911
 PrefabInstance:
@@ -24197,6 +24230,7 @@ Transform:
   - {fileID: 1393580636}
   - {fileID: 1910099767}
   - {fileID: 28119101}
+  - {fileID: 322672726}
   - {fileID: 893190491}
   - {fileID: 1213614742}
   - {fileID: 2019337117}

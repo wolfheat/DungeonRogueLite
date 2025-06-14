@@ -6,8 +6,13 @@ public class ItemSpawner : MonoBehaviour
 {
 	public static ItemSpawner Instance { get; private set; }
     [SerializeField] private Transform itemHolder; 
+    [SerializeField] private Transform damgesHolder; 
+
     [SerializeField] private WorldItem worldItemPrefab; 
+    [SerializeField] private WorldDamage worldDamagePrefab; 
+
     [SerializeField] private UIItem UIItemPrefab; 
+    //[SerializeField] private WorldDamage worldDamagePrefab; 
 
     private void Awake()
     {
@@ -28,6 +33,14 @@ public class ItemSpawner : MonoBehaviour
         }
     }
 
+    internal void SpawnWorldDamage(int damage, Vector3 pos)
+    {
+        Debug.Log("Spawning damage text "+damage+" at "+pos);
+        WorldDamage worldDamage = Instantiate(worldDamagePrefab);
+        worldDamage.transform.position = pos + Vector3.up*1.5f;
+        worldDamage.StartText(damage);
+    }
+    
     internal UIItem SpawnUIItem(ItemData data)
     {
 

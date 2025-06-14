@@ -226,7 +226,10 @@ public class EnemyController : MonoBehaviour, IDamageable
     {
         Debug.Log("Enemy recieved "+damage+" damage.");
         health -= damage;
-        
+
+        // Spawn Damage Text
+        ItemSpawner.Instance.SpawnWorldDamage(damage, transform.position);
+
         // Update in game healthbar
         healthBar.UpdateHealthBar(Math.Max(0,health), data.MaxHealth);
 
