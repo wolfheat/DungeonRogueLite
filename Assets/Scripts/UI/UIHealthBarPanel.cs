@@ -18,8 +18,6 @@ public class UIHealthBarPanel : MonoBehaviour
 
     public void UpdateInfo()
     {
-        // Set health bar and mana bar
-        Debug.Log("Updating Health and Mana BarControllers");
         //Set Bars
         healthBar.SetBar(Stats.Instance.Health, Stats.Instance.MaxHealth);
         manaBar.SetBar(Stats.Instance.MP, Stats.Instance.MaxMP);

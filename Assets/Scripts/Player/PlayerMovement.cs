@@ -99,9 +99,9 @@ public class PlayerMovement : MonoBehaviour
         Vector3 movePosition = transform.position + movement;
 
         // Check if move is legal
-        bool illegal = PlayerColliderController.Instance.CheckForFreeSpot(movePosition);
+        bool legal = PlayerColliderController.Instance.CheckIfLegalMoveTo(movePosition);
 
-        if (illegal) return;
+        if (!legal) return;
 
 
         // Center

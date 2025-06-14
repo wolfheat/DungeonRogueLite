@@ -353,6 +353,9 @@ MonoBehaviour:
   layerMaskEnemies:
     serializedVersion: 2
     m_Bits: 256
+  floorLayers:
+    serializedVersion: 2
+    m_Bits: 512
 --- !u!114 &7799915125838107817
 MonoBehaviour:
   m_ObjectHideFlags: 0

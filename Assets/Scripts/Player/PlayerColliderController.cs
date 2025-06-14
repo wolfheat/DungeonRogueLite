@@ -6,8 +6,10 @@ public class PlayerColliderController : MonoBehaviour
 
     [SerializeField] private LayerMask layerMaskWalls;
     [SerializeField] private LayerMask layerMaskEnemies;
+    [SerializeField] private LayerMask floorLayers;
     
     private LayerMask blockedLayers;
+    private LayerMask walkableLayers;
 
     public static PlayerColliderController Instance { get; private set; }
 
@@ -19,7 +21,7 @@ public class PlayerColliderController : MonoBehaviour
         }
         Instance = this;
 
-
+        walkableLayers = floorLayers;
         blockedLayers = layerMaskEnemies | layerMaskWalls;
     }
 
@@ -43,14 +45,24 @@ public class PlayerColliderController : MonoBehaviour
         }
     }
 
-    public bool CheckForFreeSpot(Vector3 pos)
+    public bool CheckIfLegalMoveTo(Vector3 pos)
     {
+        Debug.Log("Checking if player can go to pos "+pos);
         // Check for Walls
         Collider[] colliders = Physics.OverlapBox(pos,new Vector3(0.4f,0.4f,0.4f),Quaternion.identity, blockedLayers);
+        
+        Debug.Log("Walls "+colliders.Length);
+        if(colliders.Length > 0)
+            return false;
 
-        //Debug.Log("Colliders at this position "+ (colliders.Length > 0));
+        // Check for Floor
+        Collider[] floorColliders = Physics.OverlapBox(pos,new Vector3(0.4f,0.4f,0.4f),Quaternion.identity, walkableLayers);
+        Debug.Log("Floors "+ floorColliders.Length);
 
-        return colliders.Length > 0;
+        if(floorColliders.Length == 0)
+            return false;
+
+        return true;
     }
 
 }
