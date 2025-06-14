@@ -44,60 +44,39 @@ June 2025
 		* Added Damage number indicators
 		* Equipped items now give correct effects
 		* Fixed alignment issue by aligning everytime menu is opened
-
-		// Maybe issue - can have no sword equipped but still attacks with melee
-
-		// Fix color Palette for Characters
-
-		// Visualize damage dealt - effects?
-
-		// Character Animations?
-
-		// Menu System - Start menu
+		* Made player not able to move off floors
+		* Added dungeon Creation from level array, with enemies and portals
 
 
-		
-		JAM 9/6 - 15/6
-
-		
-		// Allow rotations? Make smooth transitions	
-
-		// Add timer for enemy movement in relation to player movement
-
-		// Fix a start dungeon positioning
 
 
+		// Decide how to refill health - timer or potions?
+		// Implement ORBs upgrades after deaths
+
+		JAM 9/6 - 15/6 22:00
+
+		* Add timer for enemy movement in relation to player movement ???
 
 		// MUST HAVE
-		*	Gridbased Movement (instant or animated)?
-		*	Enemies movement - attack - deaths
-		*	Items dropped
-		*	Stats upgradable
-		*	Currency dropped - gold and long term
-		
+		* Implement several stages
+		* Game Name
+		* Itch page
+		* Main Menu 
+		* Currency gold and orbs
+		* Character Animations
 
 		// LIKE TO HAVE
+		* Bosses?
+		* Random generated levels?
+		* Biomes?
+		* Implement shop between levels - every or every 5th etc??
+		* Fix color Palette for Characters
+		* Damage dealt effects
 		* Random Generated dungeons
-
-
+		* Maybe issue - can have no sword equipped but still attacks with melee
+		* Allow rotations? Make smooth transitions	
 
 		// PROB NOT
-
-
-
-
-		// Have developers able to set instant stairs?
-
-		// Implement doors?
-
-
-
-		* Make the changes for tilemaps code better
-		* Make changing rotation of stairs update the map correctly
-
-
-		// WANTS
-		// Make the new tilemap autoselect in hierachy so painting can be done on it directly
 
 
 

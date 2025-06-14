@@ -6,6 +6,7 @@ public class UIController : MonoBehaviour
 
     [SerializeField] private GameObject deathPanel;
     [SerializeField] private GameObject upgradePanel;
+    [SerializeField] private GameObject inventoryPanel;
 
 
     public static UIController Instance { get; private set; }
@@ -29,6 +30,7 @@ public class UIController : MonoBehaviour
 
         Debug.Log("Goto Main menu, or upgrade menu?");
         Stats.Instance.Reset();
+        
     }
 
     internal void StartGame()
@@ -36,8 +38,16 @@ public class UIController : MonoBehaviour
         Debug.Log("Startiong game");
     }
 
+    public void OpenInventoryPanel()
+    {
+        if (Stats.Instance.IsDead) return;
+
+        inventoryPanel.SetActive(true);
+    }
     internal void ShowLevelUpPanel()
     {
+        if (Stats.Instance.IsDead) return;
+
         upgradePanel.SetActive(true);
     }
 }

@@ -20,6 +20,7 @@ public class Stats : MonoBehaviour,IDamageable
 
 
     public int Health { get; private set; } = 100;
+    public bool IsDead { get; private set; } = false;
 
     public int MaxHealth { get; private set; } = 100;
     
@@ -104,6 +105,7 @@ public class Stats : MonoBehaviour,IDamageable
             Health = 0;
             StatsUpdated?.Invoke();
             Debug.Log("Player Died - Show Death Screen");
+            IsDead = true;
             UIController.Instance.ShowDeathPanel();
             return true;
         }
@@ -118,6 +120,7 @@ public class Stats : MonoBehaviour,IDamageable
         Level = 1;
         DungeonLevel = 1;
         EnemiesKilled = 0;
+        IsDead = false;
         StatsUpdated?.Invoke();
 
         // Send back player to start position?
@@ -137,7 +140,7 @@ public class Stats : MonoBehaviour,IDamageable
 
     private void UpdateCharacterClassData()
     {
-        Debug.Log("Updating Stats with character data: "+ ActiveCharacter.name);
+        //Debug.Log("Updating Stats with character data: "+ ActiveCharacter.name);
         MaxHealth = ActiveCharacter.BaseMaxHealth;
         Health = MaxHealth;
         MaxMP = ActiveCharacter.BaseMaxMP;
@@ -147,17 +150,12 @@ public class Stats : MonoBehaviour,IDamageable
         SightDistance = ActiveCharacter.SightDistance;
         AttackSpeed = ActiveCharacter.AttackSpeed;
         AttackDistance = ActiveCharacter.AttackDistance;
-        Debug.Log("Health: "+MaxHealth+" MP:"+MaxMP+ " BaseDamage:" + BaseDamage + " MovementSpeed:" + MovementSpeed + " SightDistance:" + SightDistance + " AttackSpeed:" + AttackSpeed + " AttackDistance:" + AttackDistance);
+        //Debug.Log("Health: "+MaxHealth+" MP:"+MaxMP+ " BaseDamage:" + BaseDamage + " MovementSpeed:" + MovementSpeed + " SightDistance:" + SightDistance + " AttackSpeed:" + AttackSpeed + " AttackDistance:" + AttackDistance);
 
     }
 
     internal void ApplyUpgradePoints(int[] upgrades)
     {
-        Debug.Log("Applying " + upgrades[0]+" points to Strength");
-        Debug.Log("Applying " + upgrades[1]+" points to Stamina");
-        Debug.Log("Applying " + upgrades[2]+" points to Intelligence");
-        Debug.Log("Applying " + upgrades[3]+" points to Willpower");
-
         BaseStrength += upgrades[0];
 
         BaseStamina += upgrades[1];
@@ -183,7 +181,6 @@ public class Stats : MonoBehaviour,IDamageable
 
     internal void UpdateInventoryStatsAddon()
     {
-        Debug.Log("Update Equipped addons");
 
         int[] addons = EquippedManager.Instance.GetEquippedItemsStats();
 

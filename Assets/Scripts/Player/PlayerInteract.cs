@@ -18,6 +18,7 @@ public class PlayerInteract : MonoBehaviour
 
     private void OnPlayerClick(InputAction.CallbackContext context)
     {
+        if (Stats.Instance.IsDead) return;
         //Debug.Log("Player Clicks");
         //Debug.Log("Selector is at " + tileSelector.transform.position);
         //Debug.Log("Selector is at " + Convert.V3ToV2Int(tileSelector.transform.position));

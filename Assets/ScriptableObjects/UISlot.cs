@@ -9,7 +9,6 @@ public class UISlot : MonoBehaviour
     {
         HeldItem = item;
 
-        Debug.Log("Setting item "+item.name+" to parent slot "+transform.name);
         // Set parent correctly
         HeldItem.SetParent(transform);
 

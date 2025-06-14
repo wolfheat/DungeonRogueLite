@@ -7,11 +7,13 @@ public class ItemSpawner : MonoBehaviour
 	public static ItemSpawner Instance { get; private set; }
     [SerializeField] private Transform itemHolder; 
     [SerializeField] private Transform damgesHolder; 
+    [SerializeField] private Transform enemyHolder; 
 
     [SerializeField] private WorldItem worldItemPrefab; 
     [SerializeField] private WorldDamage worldDamagePrefab; 
 
     [SerializeField] private UIItem UIItemPrefab; 
+    [SerializeField] private EnemyController[] enemyPrefabs; 
     //[SerializeField] private WorldDamage worldDamagePrefab; 
 
     private void Awake()
@@ -58,5 +60,13 @@ public class ItemSpawner : MonoBehaviour
     internal void RemoveUIItem(UIItem draggedItem)
     {
         Destroy(draggedItem.gameObject);
+    }
+
+    internal void SpawnEnemy(int enemyType, Vector2Int pos)
+    {
+        Debug.Log("Spawning enemy " + enemyType + ".");
+
+        EnemyController enemy = Instantiate(enemyPrefabs[enemyType],enemyHolder);
+        enemy.transform.position = Convert.V2IntToV3(pos);
     }
 }

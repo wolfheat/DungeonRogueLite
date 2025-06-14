@@ -23,8 +23,6 @@ public class PlayerMovement : MonoBehaviour
         //Inputs.Instance.PlayerControls.Player.Turn.performed += Turn;
         //Inputs.Instance.PlayerControls.Player.SideStep.performed += SideStep;
 
-
-        ReturnToStartPosition();
     }
 
     public void ReturnToStartPosition()
@@ -48,6 +46,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void LookAtMouse()
     {
+        if (Stats.Instance.IsDead) return;
+            
         // Step 1: Get the mouse position in screen space
         Vector2 mouseScreenPosition = Mouse.current.position.ReadValue();
 
@@ -85,12 +85,15 @@ public class PlayerMovement : MonoBehaviour
 
     private void Move(InputAction.CallbackContext context)
     {
+        if (Stats.Instance.IsDead) return;
+
         //Debug.Log("Player Moving "+context.action.ReadValue<Vector2>());
         MovePlayer(context.action.ReadValue<Vector2>());
     }
 
     private void MovePlayer(Vector2 vector2)
     {
+        vector2 = new Vector2(Math.Sign((int)vector2.x), Math.Sign((int)vector2.y));
 
         Vector3 movement = Vector3.forward * vector2.y + Vector3.right * vector2.x;
         //Vector3 movement = transform.forward * vector2.y + transform.right * vector2.x;

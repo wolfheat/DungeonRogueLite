@@ -4,11 +4,29 @@ using System.Text;
 using Unity.VisualScripting;
 using UnityEngine;
 
+
+[System.Flags]
+public enum TileType
+{
+    None = 0,
+    Walkable = 1, // 2
+    Wall = 2, // 1
+    Floor = Wall | Walkable // 3
+}
+
 public class LevelCreator : MonoBehaviour
 {
+    [SerializeField] private Transform floorHolder;
+    [SerializeField] private Transform wallsHolder;
+    [SerializeField] private Transform enemyHolder;
+    
+    // Biomes? 1-grassland 2-snowland 3-lavaland ???
 
-    [SerializeField] private GameObject floorHolder;
-    [SerializeField] private GameObject wallsHolder;
+    [SerializeField] private GameObject[] wallPrefabs;
+    [SerializeField] private GameObject[] floorPrefabs;
+    [SerializeField] private GameObject[] dungeonEntryExitsPrefabs;
+
+    [SerializeField] private int currentBiome = 1;
 
 
     private int[,] level;
@@ -28,19 +46,18 @@ public class LevelCreator : MonoBehaviour
         Instance = this;
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         SetLevelFromFloors();
 
-
-        //PrintLevel();
-
-        //Debug.Log("StartPos = " + level[-offset.x,-offset.y] + " after first print ");
-
         AddWallsToArray();
 
-        //PrintLevel();
+        PrintLevel();
+
+        // Now Use this level to create a snow world
+        CreateLevelFromArray();
+
+        PlayerMovement.Instance.ReturnToStartPosition();
     }
 
     private void PrintLevel()
@@ -57,6 +74,8 @@ public class LevelCreator : MonoBehaviour
         Debug.Log(sb.ToString());
     }
 
+    // SET ARRAY LEVEL FROM OBJECTS
+    #region objects->array REGION
     private void SetLevelFromFloors()
     {
         // Read all floor pieces and add them to the array with an offset?
@@ -68,7 +87,6 @@ public class LevelCreator : MonoBehaviour
 
         levelWidth = topRight.x - bottomLeft.x + 1;
         levelHeight = topRight.y - bottomLeft.y + 1;
-
 
         // Create the right size of the array and place the numbers
         level = new int[levelWidth, levelHeight];
@@ -85,13 +103,130 @@ public class LevelCreator : MonoBehaviour
         foreach (var tile in tiles) {
             if (tile == wallsHolder.transform) continue;
             Vector2Int tilePos = Convert.V3ToV2Int(tile.transform.position) - offset;
-            level[tilePos.x, tilePos.y] = 0; // Change this to 2 later to differentiate?
+            level[tilePos.x, tilePos.y] = 2; // Change this to 2 later to differentiate?
             if(tilePos.x == -offset.x && tilePos.y == -offset.y)
                 Debug.Log("0,0 removed as wall cause of object "+tile.name);
         }
 
     }
 
+    #endregion
+
+
+    // SET OBJECTS FROM ARRAY
+
+    #region array->objects REGION
+    private void CreateLevelFromArray()
+    {
+        Debug.Log("REMOVING ALL OLD TILES");
+        RemoveAllWalls();
+        RemoveAllFloors();
+        RemoveAllEnemies();
+
+        // Place artificaial start and end
+        PrintLevel();
+            
+        level[15, 2] = 8;
+        level[22, 6] = 9;
+
+        // Enemies placed
+        PlaceEnemies(10,0);
+        PlaceEnemies(10,1);
+
+
+        PrintLevel();
+
+        offset = Vector2Int.zero;
+
+        Debug.Log("CREATING ALL NEW TILES");
+        PlacePortals();
+        AddFloors();
+        AddWalls();
+    }
+
+    private void PlaceEnemies(int amt, int enemyType)
+    {
+        int xdimention = level.GetLength(0);
+        int ydimention = level.GetLength(1);
+
+        int placed = 0;
+        int triesAllowed = 150;
+        while(placed < amt && triesAllowed > 0) {
+            int x = UnityEngine.Random.Range(0, xdimention);
+            int y = UnityEngine.Random.Range(0, ydimention);
+            if (level[x,y] == 1) {
+                Vector2Int pos = new Vector2Int(x,y);
+                ItemSpawner.Instance.SpawnEnemy(enemyType, pos); 
+                //level[x,y] = 5;
+                placed++;
+                continue;
+            }
+            triesAllowed--;
+        }
+        Debug.Log("Placed enemies after "+(150-triesAllowed)+" tries.");
+    }
+
+    private void PlacePortals()
+    {
+        dungeonEntryExitsPrefabs[0].transform.position = FindPortalPosition(8);
+        dungeonEntryExitsPrefabs[1].transform.position = FindPortalPosition(9);
+    }
+
+    private Vector3 FindPortalPosition(int index)
+    {
+        for (int i = 0; i < level.GetLength(0); i++) {
+            for (int j = 0; j < level.GetLength(1); j++) {
+                if (level[i, j] != index) continue;
+                level[i, j] = 1; // Overwrite with floortile for next steps
+                return new Vector3(i,0,j);
+            }
+        }
+        return Vector3.zero;
+    }
+
+    // Adding tiles
+    private void AddFloors() => GenerateChildren(floorHolder, floorPrefabs[currentBiome],TileType.Floor);
+    private void AddWalls() => GenerateChildren(wallsHolder, wallPrefabs[currentBiome],TileType.Wall);
+        
+    
+    // Removing tiles
+    private void RemoveAllWalls() => DestroyAllChildren(wallsHolder);
+    private void RemoveAllFloors() => DestroyAllChildren(floorHolder);
+    private void RemoveAllEnemies() => DestroyAllChildren(enemyHolder);
+
+
+    private void GenerateChildren(Transform holder, GameObject prefab, TileType type)
+    {
+        float yPos = holder.position.y;
+        int amt = 0;
+        Debug.Log("Generating tiles for "+holder.name+" using prefab "+prefab.name+" TiletypeMask: "+ System.Convert.ToString((int)type, 2).PadLeft(8,'0'));
+        for (int i = 0; i < level.GetLength(0); i++) {
+            for (int j = 0; j < level.GetLength(1); j++) {
+                //if (level[i, j] != typeToUse) continue;
+                TileType cellType = (TileType)level[i, j];
+                if (cellType == TileType.None) continue;
+                if (!type.HasFlag(cellType)) continue;
+
+                GameObject tile = Instantiate(prefab, new Vector3(i, yPos, j),Quaternion.identity,holder);
+                amt++;
+            }
+        }
+        Debug.Log("Created "+amt+" items.");
+    }
+
+    private void DestroyAllChildren(Transform holder)
+    {
+        Debug.Log("Destroy children");
+        int amt = 0;    
+        Transform[] items = holder.GetComponentsInChildren<Transform>();
+        foreach (Transform item in items) {
+            if (item == holder) continue;
+            Destroy(item.gameObject);
+            amt++;
+        }
+        Debug.Log("Destroyed "+amt+" children of "+holder.name+".");
+    }
+    #endregion
 
     private (Vector2Int bottomLeft, Vector2Int topRight) GetDimensions(Transform[] floors)
     {
@@ -179,7 +314,7 @@ public class LevelCreator : MonoBehaviour
                 for (int j = -1; j <= 1; j++) {
                     if (current.x + i < 0 || current.x + i >= levelWidth - 1 || current.y + j < 0 || current.y + j >= levelHeight - 1) continue; //OOB
                     if(i==0 && j==0) continue;
-                    if (levelCopy[current.x + i, current.y + j] == 1) {
+                    if (levelCopy[current.x + i, current.y + j] == 1) { // Walkables
                         answer.Add(new Vector2Int(current.x + i, current.y + j));
                         // Remove this as an available target
                         levelCopy[current.x + i, current.y + j] = 0;

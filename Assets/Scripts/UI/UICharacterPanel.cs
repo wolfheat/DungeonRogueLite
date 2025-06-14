@@ -37,7 +37,6 @@ public class UICharacterPanel : MonoBehaviour
 
     private void StatsUpdated()
     {
-        Debug.Log("** Updating XP BAR");
         // Update XP bar
         xpBar.SetBar(Stats.Instance.XP, Stats.Instance.CurrentMaxXP);
         SetCharacterLevel(Stats.Instance.Level);

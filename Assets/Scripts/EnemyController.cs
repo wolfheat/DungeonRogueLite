@@ -52,7 +52,7 @@ public class EnemyController : MonoBehaviour, IDamageable
     public void Tick()
     {
         //Debug.Log("Enemy "+name+" recieved tick event.");
-        if (IsDead)
+        if (IsDead || Stats.Instance.IsDead)
             return;
         // Enemy ticks ahead one tick and attacks if ready to
         actionTimer--;
