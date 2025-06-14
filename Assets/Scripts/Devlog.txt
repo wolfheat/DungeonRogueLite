@@ -38,14 +38,11 @@ June 2025
 14/6	* Inventory items now work, cans swap and equip
 		* Items now drop in game and can be picked up by player
 		* Selling is now available in inventory, base price is 10
-
+		* Enemy Healthbars showing in game
+		* Update of the Inventory layout
 		
-		// Make enemies drop items that can be picked up
-
 
 		// Fix color Palette for Characters
-
-		// Add enemy HP bar above characters ingame	
 
 		// Limit player to floor tiles
 

@@ -89,6 +89,7 @@ public class UIItem : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDragHa
     {
         //transform.localScale = Vector3.one;
         //rect.sizeDelta = currentRectSize;
+        rect.sizeDelta = new Vector2(100f, 100f);
         image.sprite = data.Picture;
     }
 

@@ -1,5 +1,78 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &1737398533456739284
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 3082466889627302611}
+    m_Modifications:
+    - target: {fileID: 5761144643057672152, guid: 956a6180d22b48d4bb1457cb28885f67, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5761144643057672152, guid: 956a6180d22b48d4bb1457cb28885f67, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5761144643057672152, guid: 956a6180d22b48d4bb1457cb28885f67, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5761144643057672152, guid: 956a6180d22b48d4bb1457cb28885f67, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5761144643057672152, guid: 956a6180d22b48d4bb1457cb28885f67, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.00000008146034
+      objectReference: {fileID: 0}
+    - target: {fileID: 5761144643057672152, guid: 956a6180d22b48d4bb1457cb28885f67, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5761144643057672152, guid: 956a6180d22b48d4bb1457cb28885f67, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5761144643057672152, guid: 956a6180d22b48d4bb1457cb28885f67, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5761144643057672152, guid: 956a6180d22b48d4bb1457cb28885f67, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5761144643057672152, guid: 956a6180d22b48d4bb1457cb28885f67, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5768838325127917813, guid: 956a6180d22b48d4bb1457cb28885f67, type: 3}
+      propertyPath: m_Name
+      value: IngameHealthBar
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 956a6180d22b48d4bb1457cb28885f67, type: 3}
+--- !u!114 &1539147866607755181 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 954864373347492985, guid: 956a6180d22b48d4bb1457cb28885f67, type: 3}
+  m_PrefabInstance: {fileID: 1737398533456739284}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50c2c37760b7c764681a04d0791d88a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &6336503402614350860 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5761144643057672152, guid: 956a6180d22b48d4bb1457cb28885f67, type: 3}
+  m_PrefabInstance: {fileID: 1737398533456739284}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3264448032327736632
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -102,7 +175,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 9e4ff81f80ae8494781bf34044289572, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6336503402614350860}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9e4ff81f80ae8494781bf34044289572, type: 3}
       insertIndex: -1
@@ -180,12 +256,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 086b9e3ff5fc95a42a622b550b84aba1, type: 2}
-  playerMask:
-    serializedVersion: 2
-    m_Bits: 8
-  wallMask:
-    serializedVersion: 2
-    m_Bits: 128
-  visionMask:
-    serializedVersion: 2
-    m_Bits: 0
+  healthBar: {fileID: 1539147866607755181}
+  dropsItems: []
+--- !u!4 &3082466889627302611 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 9e4ff81f80ae8494781bf34044289572, type: 3}
+  m_PrefabInstance: {fileID: 3264448032327736632}
+  m_PrefabAsset: {fileID: 0}

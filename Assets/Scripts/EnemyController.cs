@@ -12,6 +12,7 @@ public interface IDamageable
 public class EnemyController : MonoBehaviour, IDamageable
 {
     [SerializeField] private EnemyData data;
+    [SerializeField] private IngameHealthBar healthBar;
     [SerializeField] private List<ItemData> dropsItems;
 
     private LayerMask playerMask; // Include walls and player layers
@@ -225,6 +226,10 @@ public class EnemyController : MonoBehaviour, IDamageable
     {
         Debug.Log("Enemy recieved "+damage+" damage.");
         health -= damage;
+        
+        // Update in game healthbar
+        healthBar.UpdateHealthBar(Math.Max(0,health), data.MaxHealth);
+
         if (health < 0) {
             health = 0;
             Debug.Log("Enemy Dies");
