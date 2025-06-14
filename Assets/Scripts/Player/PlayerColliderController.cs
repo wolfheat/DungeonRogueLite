@@ -26,6 +26,16 @@ public class PlayerColliderController : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         //Debug.Log("Player entered trigger "+other.name);
+        if(other.TryGetComponent(out WorldItem item)) {
+            Debug.Log("Colliding with item "+item.Data.ItemName);
+
+            // If player can pick up item 
+
+            if (InventoryController.Instance.TryPlaceItem(item)) {
+                SoundMaster.Instance.PlaySound(SoundName.ItemPickup);
+                ItemSpawner.Instance.RemoveWorldItem(item);
+            }
+        }
         if(other.TryGetComponent(out DungeonExit dungeonExit)) {
             Debug.Log("Exiting Dungeon");
             SoundMaster.Instance.PlaySound(SoundName.ExitStairReached);

@@ -9,7 +9,6 @@ public interface IDamageable
     bool TakeDamage(int damage);
 
 }
-
 public class EnemyController : MonoBehaviour, IDamageable
 {
     [SerializeField] private EnemyData data;
@@ -242,6 +241,10 @@ public class EnemyController : MonoBehaviour, IDamageable
         Debug.Log("Waiting 0.6 seconds to remove the enemy");
         yield return new WaitForSeconds(0.6f);
         Debug.Log("Removing the enemy");
+
+        // Generate the Loot now
+        ItemSpawner.Instance.SpawnItems(dropsItems,transform.position);
+
         Destroy(gameObject);
 
         // Generate Loot here?

@@ -1,9 +1,9 @@
-using System;
-using UnityEngine;
-using UnityEngine.InputSystem;
+﻿using UnityEngine;
 
 public class InventoryController : MonoBehaviour
 {
+    [SerializeField] private UISlot[] slots;
+
 
     public static InventoryController Instance { get; private set; }
 
@@ -16,36 +16,25 @@ public class InventoryController : MonoBehaviour
         Instance = this;
     }
 
-
-    private void Start()
+    public bool TryPlaceItem(WorldItem item)
     {
-        Inputs.Instance.PlayerControls.Player.One.performed += ItemOne;
-        Inputs.Instance.PlayerControls.Player.Two.performed += ItemTwo;
-        Inputs.Instance.PlayerControls.Player.Three.performed += ItemThree;
-        Inputs.Instance.PlayerControls.Player.Four.performed += ItemFour;
-    }
+        UISlot slot = FindFreeSlot();
 
-    private void OnDisable()
-    {
-        Inputs.Instance.PlayerControls.Player.One.performed -= ItemOne;
-        Inputs.Instance.PlayerControls.Player.Two.performed -= ItemTwo;
-        Inputs.Instance.PlayerControls.Player.Three.performed -= ItemThree;
-        Inputs.Instance.PlayerControls.Player.Four.performed -= ItemFour;
-    }
+        if (slot == null || item.Data == null) return false;
 
-    private void ItemOne(InputAction.CallbackContext context) => UseItem(1);
-    private void ItemTwo(InputAction.CallbackContext context) => UseItem(2);
-    private void ItemThree(InputAction.CallbackContext context) => UseItem(3);
-    private void ItemFour(InputAction.CallbackContext context) => UseItem(4);
-
-    private void UseItem(int itemIndex)
-    {
-        Debug.Log("Using item "+itemIndex);
-    }
-
-    internal bool EquippedRangedWeapon()
-    {
-        Debug.Log("Checking if player has a ranged weapon equipped");
+        // Generate the Item
+        slot.PlaceItem(ItemSpawner.Instance.SpawnUIItem(item.Data));
         return true;
     }
+
+    public UISlot FindFreeSlot()
+    {
+        foreach (var slot in slots) {
+            if(slot.HeldItem == null)
+                return slot;
+        }
+        return null;
+    }
+
+
 }

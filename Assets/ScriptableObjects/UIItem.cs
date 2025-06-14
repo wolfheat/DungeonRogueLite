@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using Wolfheat.StartMenu;
 public class UIItem : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDragHandler, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
     public ItemData data;
     //[SerializeField] Image image;
     [SerializeField] RectTransform rect;
+    [SerializeField] Image image;
+
     private const int TileSize = 86;
     private const int TileSpace = 4;
     private Vector2 baseRectSize;
@@ -57,8 +57,9 @@ public class UIItem : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDragHa
     {
         // Define this UI Item at creation
         data = dataIn;
+        UpdateItem();
         //baseRectSize = new Vector2(data.size.y * TileSize + (data.size.y - 1) * TileSpace, data.size.x * TileSize + (data.size.x - 1) * TileSpace);
-        SetToBaseRectSize();
+        //SetToBaseRectSize();
     }
 
     public void SetData(ItemData dataIn, Vector2 equippedSize)
@@ -86,8 +87,9 @@ public class UIItem : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDragHa
 
     private void UpdateItem()
     {
-        rect.sizeDelta = currentRectSize;
-        //image.sprite = data.picture;
+        //transform.localScale = Vector3.one;
+        //rect.sizeDelta = currentRectSize;
+        image.sprite = data.Picture;
     }
 
     public void ResetPosition()

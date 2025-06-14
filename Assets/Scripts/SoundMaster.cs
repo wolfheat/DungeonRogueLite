@@ -13,7 +13,8 @@ namespace Wolfheat.StartMenu
     public enum SoundName
     {
         MenuStep, MenuError, MenuClick, MenuOver, PunchRock,
-        HitEnemy, ExitStairReached, EnemyDie
+        HitEnemy, ExitStairReached, EnemyDie,
+        ItemPickup
         //FireSound,
         //FireContinious,
         //RockExplosion,

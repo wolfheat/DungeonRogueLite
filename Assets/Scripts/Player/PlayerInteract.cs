@@ -43,7 +43,7 @@ public class PlayerInteract : MonoBehaviour
 
         if(directDistance < Stats.Instance.BowReach && directDistance > 1.5) {
             // If holding a bow or staff
-            if (InventoryController.Instance.EquippedRangedWeapon()) {
+            if (SpellController.Instance.EquippedRangedWeapon()) {
                 Debug.Log("Bow Attack");
                 
                 PlayerAnimation.Instance.PlayAnimation(AnimationType.AttackBow);

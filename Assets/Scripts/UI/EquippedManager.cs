@@ -42,4 +42,14 @@ public class EquippedManager : MonoBehaviour
 		}
 		return null;
     }
+
+    internal void PickUpItem(WorldItem item)
+    {
+
+
+
+
+        Debug.Log("Picking up item.");
+		Destroy(item.gameObject);
+    }
 }

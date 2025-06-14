@@ -36,6 +36,10 @@ June 2025
 		* Inventory added proper with character stats moved here, character equip and storage
 		* Animations basics added for characters
 14/6	* Inventory items now work, cans swap and equip
+		* Items now drop in game and can be picked up by player
+
+		
+		// Make enemies drop items that can be picked up
 
 
 		// Fix color Palette for Characters
@@ -48,7 +52,7 @@ June 2025
 
 		// Character Animations?
 
-		// Menu System
+		// Menu System - Start menu
 
 
 		
