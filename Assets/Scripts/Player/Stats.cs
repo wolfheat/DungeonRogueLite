@@ -29,7 +29,9 @@ public class Stats : MonoBehaviour,IDamageable
 
     public int Level { get; private set; } = 1;
     public int DungeonLevel { get; private set; } = 1;
+    public int Coins { get; private set; } = 0;
 
+    
     public int BaseDamage { get; private set; } = 1;
     public int MovementSpeed { get; private set; } = 1;
     public int SightDistance { get; private set; } = 1;
@@ -190,4 +192,10 @@ public class Stats : MonoBehaviour,IDamageable
         StatsUpdated?.Invoke();
     }
 
+    internal void AddCoins(int value)
+    {
+        Coins += value;
+        StatsUpdated?.Invoke();
+
+    }
 }

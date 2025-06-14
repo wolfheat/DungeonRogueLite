@@ -63,4 +63,15 @@ public class DragObject : MonoBehaviour
     }
 
     internal UISlot OriginalSlot() => normalParent.GetComponent<UISlot>();
+
+    internal void SellItem()
+    {
+        UISlot sourceSlot = normalParent.GetComponent<UISlot>();
+        sourceSlot.FreeFromItem();
+        Stats.Instance.AddCoins(draggedItem.data.value);
+        ItemSpawner.Instance.RemoveUIItem(draggedItem);
+
+        // Handles wrong info showing after item swaps
+        InfoPanelController.Instance.HideInfo();
+    }
 }

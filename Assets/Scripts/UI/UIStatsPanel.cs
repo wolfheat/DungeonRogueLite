@@ -9,6 +9,7 @@ public class UIStatsPanel : MonoBehaviour
     [SerializeField] private TextMeshProUGUI dungeonLevelInfo;
     [SerializeField] private TextMeshProUGUI enemiesKilled;
     [SerializeField] private TextMeshProUGUI experience;
+    [SerializeField] private TextMeshProUGUI coins;
 
     [SerializeField] private TextMeshProUGUI strength;
     [SerializeField] private TextMeshProUGUI stamina;
@@ -34,6 +35,7 @@ public class UIStatsPanel : MonoBehaviour
         dungeonLevelInfo.text = "Dungeon: " + Stats.Instance.DungeonLevel;
         enemiesKilled.text = "Kills: " + Stats.Instance.EnemiesKilled;
         experience.text = "XP: " + Stats.Instance.XP + "/" + Stats.Instance.CurrentMaxXP;
+        coins.text = "Coins: " + Stats.Instance.Coins;
 
         strength.text = "Str: " + Stats.Instance.BaseStrength.ToString() + (Stats.Instance.ItemStrength == 0 ? "":(" + " + Stats.Instance.ItemStrength));
         stamina.text = "Sta: " + Stats.Instance.BaseStamina.ToString() + (Stats.Instance.ItemStamina == 0 ? "" : (" + " + Stats.Instance.ItemStamina));

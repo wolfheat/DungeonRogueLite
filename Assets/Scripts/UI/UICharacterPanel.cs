@@ -41,6 +41,7 @@ public class UICharacterPanel : MonoBehaviour
         // Update XP bar
         xpBar.SetBar(Stats.Instance.XP, Stats.Instance.CurrentMaxXP);
         SetCharacterLevel(Stats.Instance.Level);
+        coinsAmount.text = Stats.Instance.Coins + "Coins";
     }
     private void CharacterUpdated()
     {

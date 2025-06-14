@@ -37,6 +37,7 @@ June 2025
 		* Animations basics added for characters
 14/6	* Inventory items now work, cans swap and equip
 		* Items now drop in game and can be picked up by player
+		* Selling is now available in inventory, base price is 10
 
 		
 		// Make enemies drop items that can be picked up

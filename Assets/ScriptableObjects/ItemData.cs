@@ -16,6 +16,7 @@ public class ItemData : ScriptableObject
     public int Intelligence = 0;
     [Range(0,20)]
     public int Willpower = 0;
+    public int value = 10;
 
     internal int[] GetStatsArray() => new int[] { Strength, Stamina, Intelligence, Willpower };
 }

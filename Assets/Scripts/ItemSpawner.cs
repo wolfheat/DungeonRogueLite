@@ -41,4 +41,9 @@ public class ItemSpawner : MonoBehaviour
     {
         Destroy(item.gameObject);
     }
+
+    internal void RemoveUIItem(UIItem draggedItem)
+    {
+        Destroy(draggedItem.gameObject);
+    }
 }

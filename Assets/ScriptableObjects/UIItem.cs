@@ -192,6 +192,10 @@ public class UIItem : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDragHa
                 Debug.Log("Dragging from equipmentSlot but swapping with wrong itemtype");
                 DragObject.Instance.ReturnItem();
                 return;
+        }else if(targetSlot is SellSlot) {
+            Debug.Log("Selling Item ");
+            DragObject.Instance.SellItem();
+                return;
         }
         // Handle releasing over valid Slot
         DragObject.Instance.MoveItemToSlot(targetSlot);
