@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class UISlot : MonoBehaviour
 {    
@@ -13,10 +14,17 @@ public class UISlot : MonoBehaviour
         HeldItem.SetParent(transform);
 
         // Return to center of spot
-        HeldItem.transform.localPosition = new Vector3(50, 50, 0);
         HeldItem.transform.localScale = new Vector3(1, 1, 1);
+        HeldItem.transform.localPosition = new Vector3(50, 50, 0);
     }
 
     public void FreeFromItem() => HeldItem = null;
+
+    internal void AlignItem()
+    {
+        // Return to center of spot
+        HeldItem.transform.localScale = new Vector3(1, 1, 1);
+        HeldItem.transform.localPosition = new Vector3(50, 50, 0);
+    }
 }
 

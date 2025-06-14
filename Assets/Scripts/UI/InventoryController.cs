@@ -5,7 +5,7 @@ public class InventoryController : MonoBehaviour
 {
     [SerializeField] private UISlot[] slots;
 
-
+    [SerializeField] private GameObject preplaceItemsHolder; 
     public static InventoryController Instance { get; private set; }
 
     private void Awake()
@@ -15,6 +15,31 @@ public class InventoryController : MonoBehaviour
             return;
         }
         Instance = this;
+    }
+
+    private void Start()
+    {
+        PlacePreplaceItems();
+    }
+
+    private void OnEnable()
+    {
+        // Align all Items
+
+        foreach (var slot in slots) {
+            if (slot.HeldItem != null)
+                slot.AlignItem();
+        }
+    }
+
+    private void PlacePreplaceItems()
+    {
+        UIItem[] items = preplaceItemsHolder.transform.GetComponentsInChildren<UIItem>();
+        foreach (var item in items) {
+            UISlot slot = FindFreeSlot();
+            slot.PlaceItem(item);
+            item.UpdateItem();
+        }
     }
 
     public bool TryPlaceItem(WorldItem item)

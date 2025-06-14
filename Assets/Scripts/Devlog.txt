@@ -43,6 +43,7 @@ June 2025
 		* Player limited to only walk on floors
 		* Added Damage number indicators
 		* Equipped items now give correct effects
+		* Fixed alignment issue by aligning everytime menu is opened
 
 		// Maybe issue - can have no sword equipped but still attacks with melee
 

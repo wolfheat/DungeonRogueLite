@@ -85,7 +85,7 @@ public class UIItem : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDragHa
             currentRectSize = baseRectSize;
     }
 
-    private void UpdateItem()
+    public void UpdateItem()
     {
         //transform.localScale = Vector3.one;
         //rect.sizeDelta = currentRectSize;
