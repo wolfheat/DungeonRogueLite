@@ -80,10 +80,10 @@ public class UpgradePanelController : MonoBehaviour
 
     public void UpdatePanel()
     {
-        strength.text = Stats.Instance.Strength.ToString() + (upgrades[0] > 0 ? (" + " + upgrades[0]) : "");
-        stamina.text = Stats.Instance.Stamina.ToString() + (upgrades[1] > 0 ? (" + " + upgrades[1]) : "");
-        intelligence.text = Stats.Instance.Intelligence.ToString() + (upgrades[2] > 0 ? (" + " + upgrades[2]) : "");
-        willpower.text = Stats.Instance.Willpower.ToString() + (upgrades[3] > 0 ? (" + " + upgrades[3]) : "");
+        strength.text = Stats.Instance.BaseStrength.ToString() + (upgrades[0] > 0 ? (" + " + upgrades[0]) : "");
+        stamina.text = Stats.Instance.BaseStamina.ToString() + (upgrades[1] > 0 ? (" + " + upgrades[1]) : "");
+        intelligence.text = Stats.Instance.BaseIntelligence.ToString() + (upgrades[2] > 0 ? (" + " + upgrades[2]) : "");
+        willpower.text = Stats.Instance.BaseWillpower.ToString() + (upgrades[3] > 0 ? (" + " + upgrades[3]) : "");
         availablePointsText.text = "Available Points: " + availablePoints.ToString();
 
         // Hide all plusses if all points are assigned

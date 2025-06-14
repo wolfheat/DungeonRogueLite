@@ -8,10 +8,16 @@ public class Stats : MonoBehaviour,IDamageable
 
     public AnimationCurve XPCurve;
 
-    public int Strength { get; private set; } = 10;
-    public int Stamina { get; private set; } = 10;
-    public int Intelligence { get; private set; } = 10;
-    public int Willpower { get; private set; } = 10;
+    public int BaseStrength { get; private set; } = 10;
+    public int BaseStamina { get; private set; } = 10;
+    public int BaseIntelligence { get; private set; } = 10;
+    public int BaseWillpower { get; private set; } = 10;
+
+    public int ItemStrength { get; private set; } = 0;
+    public int ItemStamina { get; private set; } = 0;
+    public int ItemIntelligence { get; private set; } = 0;
+    public int ItemWillpower { get; private set; } = 0;
+
 
     public int Health { get; private set; } = 100;
 
@@ -40,8 +46,8 @@ public class Stats : MonoBehaviour,IDamageable
 
     public int CurrentMaxXP => (int)XPCurve.Evaluate((float)Level);
 
-    public int MeleeDamage => BaseDamage + (int)(Strength*0.8f);
-    public int RangeDamage => BaseDamage + (int)(Intelligence*0.8f);
+    public int MeleeDamage => BaseDamage + (int)(BaseStrength*0.8f);
+    public int RangeDamage => BaseDamage + (int)(BaseIntelligence*0.8f);
 
 
     public static Action StatsUpdated;
@@ -147,13 +153,13 @@ public class Stats : MonoBehaviour,IDamageable
         Debug.Log("Applying " + upgrades[2]+" points to Intelligence");
         Debug.Log("Applying " + upgrades[3]+" points to Willpower");
 
-        Strength += upgrades[0];
+        BaseStrength += upgrades[0];
 
-        Stamina += upgrades[1];
+        BaseStamina += upgrades[1];
 
-        Intelligence += upgrades[2];
+        BaseIntelligence += upgrades[2];
 
-        Willpower += upgrades[3];
+        BaseWillpower += upgrades[3];
 
         // 1 Strength = 1 Strength
         // 1 Stamina = 5 Health
@@ -165,8 +171,23 @@ public class Stats : MonoBehaviour,IDamageable
 
     private void UpdateMaxHPandMP()
     {
-        MaxHealth = ActiveCharacter.BaseMaxHealth + Stamina * 5;
-        MaxMP = ActiveCharacter.BaseMaxMP + Intelligence * 5;
+        MaxHealth = ActiveCharacter.BaseMaxHealth + BaseStamina * 5;
+        MaxMP = ActiveCharacter.BaseMaxMP + BaseIntelligence * 5;
         StatsUpdated?.Invoke();
     }
+
+    internal void UpdateInventoryStatsAddon()
+    {
+        Debug.Log("Update Equipped addons");
+
+        int[] addons = EquippedManager.Instance.GetEquippedItemsStats();
+
+        ItemStrength = addons[0];
+        ItemStamina = addons[1];
+        ItemIntelligence = addons[2];
+        ItemWillpower = addons[3];
+
+        StatsUpdated?.Invoke();
+    }
+
 }

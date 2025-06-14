@@ -34,8 +34,8 @@ June 2025
 		* Upgrades now apply correctly
 		* Character info added the classes
 		* Inventory added proper with character stats moved here, character equip and storage
-
-
+		* Animations basics added for characters
+14/6	* Inventory items now work, cans swap and equip
 
 
 		// Fix color Palette for Characters

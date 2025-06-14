@@ -10,11 +10,20 @@ public class UIStatsPanel : MonoBehaviour
     [SerializeField] private TextMeshProUGUI enemiesKilled;
     [SerializeField] private TextMeshProUGUI experience;
 
+    [SerializeField] private TextMeshProUGUI strength;
+    [SerializeField] private TextMeshProUGUI stamina;
+    [SerializeField] private TextMeshProUGUI intelligence;
+    [SerializeField] private TextMeshProUGUI willpower;
+
     private void Start()
     {
         UpdateInfo();
     }
-    private void OnEnable() => Stats.StatsUpdated += UpdateInfo;
+    private void OnEnable()
+    {
+        Stats.StatsUpdated += UpdateInfo;
+        UpdateInfo();
+    }
 
     private void OnDisable() => Stats.StatsUpdated -= UpdateInfo;
 
@@ -25,6 +34,11 @@ public class UIStatsPanel : MonoBehaviour
         dungeonLevelInfo.text = "Dungeon: " + Stats.Instance.DungeonLevel;
         enemiesKilled.text = "Kills: " + Stats.Instance.EnemiesKilled;
         experience.text = "XP: " + Stats.Instance.XP + "/" + Stats.Instance.CurrentMaxXP;
+
+        strength.text = "Str: " + Stats.Instance.BaseStrength.ToString() + (Stats.Instance.ItemStrength == 0 ? "":(" + " + Stats.Instance.ItemStrength));
+        stamina.text = "Sta: " + Stats.Instance.BaseStamina.ToString() + (Stats.Instance.ItemStamina == 0 ? "" : (" + " + Stats.Instance.ItemStamina));
+        intelligence.text = "Int: " + Stats.Instance.BaseIntelligence.ToString() + (Stats.Instance.ItemIntelligence == 0 ? "" : (" + " + Stats.Instance.ItemIntelligence));
+        willpower.text = "Wil: " + Stats.Instance.BaseWillpower.ToString() + (Stats.Instance.ItemWillpower == 0 ? "" : (" + " + Stats.Instance.ItemWillpower));
     }
 
 

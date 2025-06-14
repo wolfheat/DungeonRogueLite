@@ -1,10 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
-using static UnityEngine.UI.Image;
 
 
 public interface IDamageable
@@ -16,7 +13,7 @@ public interface IDamageable
 public class EnemyController : MonoBehaviour, IDamageable
 {
     [SerializeField] private EnemyData data;
-
+    [SerializeField] private List<ItemData> dropsItems;
 
     private LayerMask playerMask; // Include walls and player layers
     private LayerMask wallMask; // Include walls and player layers
@@ -45,6 +42,7 @@ public class EnemyController : MonoBehaviour, IDamageable
         //Subscribe to the tick manager
         TickManager.TickGame += Tick;
 
+        // When generated also apply the dropItems by code?
 
 
     }
