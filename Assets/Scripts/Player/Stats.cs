@@ -48,8 +48,8 @@ public class Stats : MonoBehaviour,IDamageable
 
     public int CurrentMaxXP => (int)XPCurve.Evaluate((float)Level);
 
-    public int MeleeDamage => BaseDamage + (int)(BaseStrength*0.8f);
-    public int RangeDamage => BaseDamage + (int)(BaseIntelligence*0.8f);
+    public int MeleeDamage => BaseDamage + (int)((BaseStrength+ ItemStrength) *0.8f);
+    public int RangeDamage => BaseDamage + (int)((BaseIntelligence+ItemIntelligence)*0.8f);
 
 
     public static Action StatsUpdated;
@@ -176,8 +176,8 @@ public class Stats : MonoBehaviour,IDamageable
 
     private void UpdateMaxHPandMP()
     {
-        MaxHealth = ActiveCharacter.BaseMaxHealth + BaseStamina * 5;
-        MaxMP = ActiveCharacter.BaseMaxMP + BaseIntelligence * 5;
+        MaxHealth = ActiveCharacter.BaseMaxHealth + (BaseStamina + ItemStamina) * 5;
+        MaxMP = ActiveCharacter.BaseMaxMP + (BaseIntelligence + ItemIntelligence) * 5;
         StatsUpdated?.Invoke();
     }
 
@@ -191,6 +191,8 @@ public class Stats : MonoBehaviour,IDamageable
         ItemStamina = addons[1];
         ItemIntelligence = addons[2];
         ItemWillpower = addons[3];
+
+        UpdateMaxHPandMP();
 
         StatsUpdated?.Invoke();
     }

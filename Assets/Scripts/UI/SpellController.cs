@@ -43,10 +43,5 @@ public class SpellController : MonoBehaviour
         Debug.Log("Using item "+itemIndex);
     }
 
-    internal bool EquippedRangedWeapon()
-    {
-        Debug.Log("Checking if player has a ranged weapon equipped");
-        return true;
-    }
 
 }

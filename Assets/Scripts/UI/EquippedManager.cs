@@ -52,4 +52,13 @@ public class EquippedManager : MonoBehaviour
         Debug.Log("Picking up item.");
 		Destroy(item.gameObject);
     }
+
+    internal bool EquippedRangedWeapon()
+    {
+        foreach (var slot in slots) {
+            if (slot.HeldItem != null && slot.HeldItem.data.EquipmentType == EquipmentType.Bow)
+                return true;
+        }
+		return false;
+    }
 }

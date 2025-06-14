@@ -42,12 +42,13 @@ June 2025
 		* Update of the Inventory layout
 		* Player limited to only walk on floors
 		* Added Damage number indicators
+		* Equipped items now give correct effects
 
-
+		// Maybe issue - can have no sword equipped but still attacks with melee
 
 		// Fix color Palette for Characters
 
-		// Visualize damage dealt
+		// Visualize damage dealt - effects?
 
 		// Character Animations?
 

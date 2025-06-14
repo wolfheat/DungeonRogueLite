@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class InventoryController : MonoBehaviour
 {
@@ -35,6 +36,5 @@ public class InventoryController : MonoBehaviour
         }
         return null;
     }
-
 
 }
