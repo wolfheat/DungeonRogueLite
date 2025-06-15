@@ -27,7 +27,7 @@ public class ItemSpawner : MonoBehaviour
 
     internal void SpawnItems(List<ItemData> dropsItems, Vector3 position)
     {
-        Debug.Log("Requested spawning items "+dropsItems.Count+" at "+position);
+        //Debug.Log("Requested spawning items "+dropsItems.Count+" at "+position);
 
         foreach (ItemData data in dropsItems) {
             WorldItem worldItem = Instantiate(worldItemPrefab, position, Quaternion.identity, itemHolder);
@@ -37,7 +37,7 @@ public class ItemSpawner : MonoBehaviour
 
     internal void SpawnWorldDamage(int damage, Vector3 pos)
     {
-        Debug.Log("Spawning damage text "+damage+" at "+pos);
+        //Debug.Log("Spawning damage text "+damage+" at "+pos);
         WorldDamage worldDamage = Instantiate(worldDamagePrefab);
         worldDamage.transform.position = pos + Vector3.up*1.5f;
         worldDamage.StartText(damage);
@@ -64,7 +64,7 @@ public class ItemSpawner : MonoBehaviour
 
     internal void SpawnEnemy(int enemyType, Vector2Int pos)
     {
-        Debug.Log("Spawning enemy " + enemyType + ".");
+        //Debug.Log("Spawning enemy " + enemyType + ".");
 
         EnemyController enemy = Instantiate(enemyPrefabs[enemyType],enemyHolder);
         enemy.transform.position = Convert.V2IntToV3(pos);

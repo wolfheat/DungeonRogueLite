@@ -21,7 +21,8 @@ public class Stats : MonoBehaviour,IDamageable
 
     public int Health { get; private set; } = 100;
     public bool IsDead { get; private set; } = false;
-
+    public bool IsPaused { get; private set; } = false;
+    public void Pause(bool doPause=true) => IsPaused = doPause;
     public int MaxHealth { get; private set; } = 100;
     
     public int MP { get; private set; } = 100;
@@ -90,17 +91,20 @@ public class Stats : MonoBehaviour,IDamageable
     public void NextDungeonLevel()
     {
         DungeonLevel++;
+        Debug.Log("Dungeon Level set to "+DungeonLevel);
+
+        LevelCreator.Instance.GotoNextLevel();
         StatsUpdated?.Invoke();
     }
 
     public bool TakeDamage(int damage)
     {
-        Debug.Log("Taking damage health was "+Health + "/" + MaxHealth);
+        //Debug.Log("Taking damage health was "+Health + "/" + MaxHealth);
         Health -= damage;
 
         ItemSpawner.Instance.SpawnWorldDamage(damage,PlayerColliderController.Instance.transform.position);
 
-        Debug.Log("Taking damage health becomes "+Health+"/"+MaxHealth);
+        //Debug.Log("Taking damage health becomes "+Health+"/"+MaxHealth);
         if (Health < 0) {
             Health = 0;
             StatsUpdated?.Invoke();
@@ -115,6 +119,7 @@ public class Stats : MonoBehaviour,IDamageable
 
     internal void Reset()
     {
+        Debug.Log("Stats RESET");
         Health = MaxHealth;
         MP = MaxMP;
         Level = 1;

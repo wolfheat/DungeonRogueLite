@@ -46,8 +46,8 @@ June 2025
 		* Fixed alignment issue by aligning everytime menu is opened
 		* Made player not able to move off floors
 		* Added dungeon Creation from level array, with enemies and portals
-
-
+15/6	* LevelData files added
+		* Active Dungeon Level indicator UI added
 
 
 		// Decide how to refill health - timer or potions?

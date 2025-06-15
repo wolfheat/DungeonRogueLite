@@ -52,7 +52,7 @@ public class EnemyController : MonoBehaviour, IDamageable
     public void Tick()
     {
         //Debug.Log("Enemy "+name+" recieved tick event.");
-        if (IsDead || Stats.Instance.IsDead)
+        if (IsDead || Stats.Instance.IsDead || Stats.Instance.IsPaused)
             return;
         // Enemy ticks ahead one tick and attacks if ready to
         actionTimer--;
@@ -65,13 +65,13 @@ public class EnemyController : MonoBehaviour, IDamageable
 
     private void DoAction()
     {
-        Debug.Log(" Enemy "+name+" action!");
+        //Debug.Log(" Enemy "+name+" action!");
         actionTimer = data.ActionSpeed;
 
         // If to far away move closer to player
 
         if (EvaluateDistanceToPlayer()) {
-            Debug.Log("Enemy attacking player! DMG:"+data.Damage);
+            //Debug.Log("Enemy attacking player! DMG:"+data.Damage);
             Stats.Instance.TakeDamage(data.Damage);
             // Face Player ?
         }
@@ -108,7 +108,7 @@ public class EnemyController : MonoBehaviour, IDamageable
                 return true;
             }
             else {
-                Debug.Log("Player is close enough but not visible to the enemy");
+                //Debug.Log("Player is close enough but not visible to the enemy");
             }
         }
         else {
@@ -121,7 +121,7 @@ public class EnemyController : MonoBehaviour, IDamageable
         // Move enemy maxsteps towards player
 
         if (path.Count <= 1) {
-            Debug.Log("Enemy is already next to player - should not print since player should be seen and close enoug to be targeted");
+            //Debug.Log("Enemy is already next to player - should not print since player should be seen and close enoug to be targeted");
         }
         else {
             // Moving towards player
@@ -159,7 +159,7 @@ public class EnemyController : MonoBehaviour, IDamageable
         Debug.DrawRay(eye, dir * dist, Color.blue);
 
         if (Physics.Raycast(eye, dir, out RaycastHit hit, dist)) {
-            Debug.Log("Hit: " + hit.collider.name + " Layer: " + LayerMask.LayerToName(hit.collider.gameObject.layer));
+            //Debug.Log("Hit: " + hit.collider.name + " Layer: " + LayerMask.LayerToName(hit.collider.gameObject.layer));
             if(hit.collider.TryGetComponent(out PlayerColliderController player)) {
                 return true;
             }
@@ -173,7 +173,7 @@ public class EnemyController : MonoBehaviour, IDamageable
 
     private void MoveEnemy(Vector2Int movement)
     {
-        Debug.Log("Enemy Moves to " + movement);
+        //Debug.Log("Enemy Moves to " + movement);
 
         // Check so the movement is valid
 

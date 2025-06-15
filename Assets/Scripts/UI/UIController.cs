@@ -35,14 +35,22 @@ public class UIController : MonoBehaviour
 
     internal void StartGame()
     {
-        Debug.Log("Startiong game");
+        Debug.Log("Starting game");
     }
 
     public void OpenInventoryPanel()
     {
         if (Stats.Instance.IsDead) return;
+        Stats.Instance.Pause();
 
         inventoryPanel.SetActive(true);
+    }
+
+    public void CloseInventoryPanel()
+    {
+        Stats.Instance.Pause(false);
+
+        inventoryPanel.SetActive(false);
     }
     internal void ShowLevelUpPanel()
     {

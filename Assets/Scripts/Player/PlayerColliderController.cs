@@ -47,17 +47,17 @@ public class PlayerColliderController : MonoBehaviour
 
     public bool CheckIfLegalMoveTo(Vector3 pos)
     {
-        Debug.Log("Checking if player can go to pos "+pos);
+        //Debug.Log("Checking if player can go to pos "+pos);
         // Check for Walls
         Collider[] colliders = Physics.OverlapBox(pos,new Vector3(0.4f,0.4f,0.4f),Quaternion.identity, blockedLayers);
         
-        Debug.Log("Walls "+colliders.Length);
+        //Debug.Log("Walls "+colliders.Length);
         if(colliders.Length > 0)
             return false;
 
         // Check for Floor
         Collider[] floorColliders = Physics.OverlapBox(pos,new Vector3(0.4f,0.4f,0.4f),Quaternion.identity, walkableLayers);
-        Debug.Log("Floors "+ floorColliders.Length);
+        //Debug.Log("Floors "+ floorColliders.Length);
 
         if(floorColliders.Length == 0)
             return false;

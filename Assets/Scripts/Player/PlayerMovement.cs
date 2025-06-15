@@ -46,7 +46,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void LookAtMouse()
     {
-        if (Stats.Instance.IsDead) return;
+        if (Stats.Instance.IsDead || Stats.Instance.IsPaused) return;
             
         // Step 1: Get the mouse position in screen space
         Vector2 mouseScreenPosition = Mouse.current.position.ReadValue();
@@ -85,7 +85,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Move(InputAction.CallbackContext context)
     {
-        if (Stats.Instance.IsDead) return;
+        if (Stats.Instance.IsDead || Stats.Instance.IsPaused) return;
 
         //Debug.Log("Player Moving "+context.action.ReadValue<Vector2>());
         MovePlayer(context.action.ReadValue<Vector2>());

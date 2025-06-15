@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 
 [System.Flags]
@@ -13,17 +14,20 @@ public enum TileType
     Wall = 2, // 1
     Floor = Wall | Walkable // 3
 }
-
 public class LevelCreator : MonoBehaviour
 {
     [SerializeField] private Transform floorHolder;
     [SerializeField] private Transform wallsHolder;
     [SerializeField] private Transform enemyHolder;
-    
+    [SerializeField] private Transform itemsHolder;
+
     // Biomes? 1-grassland 2-snowland 3-lavaland ???
 
-    [SerializeField] private GameObject[] wallPrefabs;
+    [Header("Floor")]
     [SerializeField] private GameObject[] floorPrefabs;
+    [Header("Walls")]
+    [SerializeField] private GameObject[] wallPrefabs;
+    [Header("Portals")]
     [SerializeField] private GameObject[] dungeonEntryExitsPrefabs;
 
     [SerializeField] private int currentBiome = 1;
@@ -44,7 +48,12 @@ public class LevelCreator : MonoBehaviour
             return;
         }
         Instance = this;
+
+        Inputs.Instance.PlayerControls.Player.P.performed += PrintLevelCode;
     }
+    private void OnDisable() => Inputs.Instance.PlayerControls.Player.P.performed -= PrintLevelCode;
+
+    private void PrintLevelCode(InputAction.CallbackContext context) => PrintLevelCode();
 
     void Start()
     {
@@ -52,11 +61,17 @@ public class LevelCreator : MonoBehaviour
 
         AddWallsToArray();
 
-        PrintLevel();
+        //PrintLevel();
 
         // Now Use this level to create a snow world
-        CreateLevelFromArray();
+        ResetLevel();
+    }
 
+    private void ResetLevel()
+    {
+        currentBiome = (Stats.Instance.DungeonLevel-1) % 3;   
+        Debug.Log("Biome set to "+currentBiome);
+        CreateLevelFromArray();
         PlayerMovement.Instance.ReturnToStartPosition();
     }
 
@@ -72,6 +87,19 @@ public class LevelCreator : MonoBehaviour
             sb.Append("\n");
         }
         Debug.Log(sb.ToString());
+    }
+    private void PrintLevelCode()
+    {
+
+        StringBuilder sb = new StringBuilder("\n");
+        for (int j = level.GetLength(1) - 1; j >= 0; j--) {
+            sb.Append("[");
+            for (int i = 0; i < level.GetLength(0); i++) {
+                sb.Append(level[i,j] + (i<(level.GetLength(0)-1)?",":"]\n"));
+            }
+            //sb.Append(j==0?"};\n":",\n");
+        }
+        Debug.Log(sb.ToString());   
     }
 
     // SET ARRAY LEVEL FROM OBJECTS
@@ -113,8 +141,17 @@ public class LevelCreator : MonoBehaviour
     #endregion
 
 
-    // SET OBJECTS FROM ARRAY
 
+    internal void GotoNextLevel()
+    {
+        Debug.Log("Creating and going to next dungeon level");
+
+        // Generate new Level array
+
+        ResetLevel();
+    }
+
+    // SET OBJECTS FROM ARRAY
     #region array->objects REGION
     private void CreateLevelFromArray()
     {
@@ -122,19 +159,24 @@ public class LevelCreator : MonoBehaviour
         RemoveAllWalls();
         RemoveAllFloors();
         RemoveAllEnemies();
+        RemoveAllItems();
 
         // Place artificaial start and end
-        PrintLevel();
+        //PrintLevel();
             
-        level[15, 2] = 8;
-        level[22, 6] = 9;
+        PrintLevelCode();
+
+        int levelTypeToLoad = (Stats.Instance.DungeonLevel - 1)% LevelDataController.Instance.TotalLevels;
+        Debug.Log("Loading Level ID "+levelTypeToLoad+" cause level = "+Stats.Instance.DungeonLevel);
+        // Get Data for next level
+        level = LevelDataController.Instance.GetLevelData(levelTypeToLoad);
 
         // Enemies placed
         PlaceEnemies(10,0);
         PlaceEnemies(10,1);
 
 
-        PrintLevel();
+        //PrintLevel();
 
         offset = Vector2Int.zero;
 
@@ -163,7 +205,7 @@ public class LevelCreator : MonoBehaviour
             }
             triesAllowed--;
         }
-        Debug.Log("Placed enemies after "+(150-triesAllowed)+" tries.");
+        Debug.Log("Placed All Enemies With "+(150-triesAllowed)+" failed tries.");
     }
 
     private void PlacePortals()
@@ -193,13 +235,14 @@ public class LevelCreator : MonoBehaviour
     private void RemoveAllWalls() => DestroyAllChildren(wallsHolder);
     private void RemoveAllFloors() => DestroyAllChildren(floorHolder);
     private void RemoveAllEnemies() => DestroyAllChildren(enemyHolder);
+    private void RemoveAllItems() => DestroyAllChildren(itemsHolder);
 
 
     private void GenerateChildren(Transform holder, GameObject prefab, TileType type)
     {
         float yPos = holder.position.y;
         int amt = 0;
-        Debug.Log("Generating tiles for "+holder.name+" using prefab "+prefab.name+" TiletypeMask: "+ System.Convert.ToString((int)type, 2).PadLeft(8,'0'));
+        //Debug.Log("Generating tiles for "+holder.name+" using prefab "+prefab.name+" TiletypeMask: "+ System.Convert.ToString((int)type, 2).PadLeft(8,'0'));
         for (int i = 0; i < level.GetLength(0); i++) {
             for (int j = 0; j < level.GetLength(1); j++) {
                 //if (level[i, j] != typeToUse) continue;
@@ -211,12 +254,12 @@ public class LevelCreator : MonoBehaviour
                 amt++;
             }
         }
-        Debug.Log("Created "+amt+" items.");
+        //Debug.Log("Created "+amt+" items.");
     }
 
     private void DestroyAllChildren(Transform holder)
     {
-        Debug.Log("Destroy children");
+        //Debug.Log("Destroy children");
         int amt = 0;    
         Transform[] items = holder.GetComponentsInChildren<Transform>();
         foreach (Transform item in items) {
@@ -224,7 +267,7 @@ public class LevelCreator : MonoBehaviour
             Destroy(item.gameObject);
             amt++;
         }
-        Debug.Log("Destroyed "+amt+" children of "+holder.name+".");
+        //Debug.Log("Destroyed "+amt+" children of "+holder.name+".");
     }
     #endregion
 
@@ -336,4 +379,5 @@ public class LevelCreator : MonoBehaviour
         }
 
     }
+
 }

@@ -21,7 +21,7 @@ public class CharacterSelectionPanel : MonoBehaviour
 
     public void CharacterSelected(int index)
     {
-        Debug.Log("Selecting character "+index);
+        //Debug.Log("Selecting character "+index);
         selectedIndex = index;
         characterInfo.text = characterDatas[selectedIndex].Information;
 
