@@ -164,7 +164,10 @@ public class LevelCreator : MonoBehaviour
         // Place artificaial start and end
         //PrintLevel();
             
+        Debug.Log("");
+        Debug.Log("");
         PrintLevelCode();
+        Debug.Log("");
 
         int levelTypeToLoad = (Stats.Instance.DungeonLevel - 1)% LevelDataController.Instance.TotalLevels;
         Debug.Log("Loading Level ID "+levelTypeToLoad+" cause level = "+Stats.Instance.DungeonLevel);

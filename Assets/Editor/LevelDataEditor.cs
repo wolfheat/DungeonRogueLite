@@ -23,7 +23,7 @@ public class LevelDataEditor : Editor
         EditorGUILayout.LabelField("Level Data", EditorStyles.boldLabel);
 
         EditorGUI.BeginChangeCheck();
-        string newText = EditorGUILayout.TextArea(data.LevelString, _monospaceStyle, GUILayout.Height(300));
+        string newText = EditorGUILayout.TextArea(data.LevelString, _monospaceStyle, GUILayout.Height(550));
         if (EditorGUI.EndChangeCheck()) {
             Undo.RecordObject(data, "Edit Level Data");
             data.LevelString = newText;
