@@ -54,7 +54,10 @@ June 2025
 		* Implemented Random Generated levels
 		* Fixed issue with enemy pathfinind not working
 		* Fixed enemy pathfinding only allowing one enemy per tile
+		* Added rotations for the player
 
+
+		* Need to fix enemy healthbars when rotated
 		
 
 

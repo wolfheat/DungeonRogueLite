@@ -8,6 +8,9 @@ public class PlayerMovement : MonoBehaviour
 
     public static PlayerMovement Instance { get; private set; }
 
+    Vector3 forward = Vector3.forward;
+    int forwardIndex = 0;
+
     private void Awake()
     {
         if (Instance != null) {
@@ -20,7 +23,7 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         Inputs.Instance.PlayerControls.Player.Move.performed += Move;
-        //Inputs.Instance.PlayerControls.Player.Turn.performed += Turn;
+        Inputs.Instance.PlayerControls.Player.Turn.performed += Turn;
         //Inputs.Instance.PlayerControls.Player.SideStep.performed += SideStep;
 
     }
@@ -38,7 +41,7 @@ public class PlayerMovement : MonoBehaviour
     private void OnDisable()
     {
         Inputs.Instance.PlayerControls.Player.Move.performed -= Move;
-        //Inputs.Instance.PlayerControls.Player.Turn.performed -= Turn;
+        Inputs.Instance.PlayerControls.Player.Turn.performed -= Turn;
        // Inputs.Instance.PlayerControls.Player.SideStep.performed -= SideStep;        
     }
 
@@ -79,7 +82,25 @@ public class PlayerMovement : MonoBehaviour
 
     private void TurnPlayer(float v)
     {
-        transform.rotation = Quaternion.LookRotation(transform.right*v);
+        Debug.Log("Turning Player");
+
+        // Rotate here
+        forwardIndex = (forwardIndex +(v > 0 ? 1 : 3)) % 4;
+        Debug.Log("Forward index becomes" + forwardIndex);
+
+        forward = forwardIndex switch
+        {
+            0 => Vector3.forward,
+            1 => Vector3.right,
+            2 => -Vector3.forward,
+            3 => -Vector3.right,
+            _ => Vector3.forward
+        };
+        Debug.Log("Turning to forward "+forward);
+
+        CenterOverPlayer.Instance.SetRotation(forward);
+
+        //transform.rotation = Quaternion.LookRotation(transform.right*v);
         //transform.rotation = Quaternion.LookRotation(transform.right*v,Vector3.up);
     }
 
@@ -87,6 +108,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Stats.Instance.IsDead || Stats.Instance.IsPaused) return;
 
+        
         //Debug.Log("Player Moving "+context.action.ReadValue<Vector2>());
         MovePlayer(context.action.ReadValue<Vector2>());
     }
@@ -95,10 +117,23 @@ public class PlayerMovement : MonoBehaviour
     {
         vector2 = new Vector2(Math.Sign((int)vector2.x), Math.Sign((int)vector2.y));
 
-        Vector3 movement = Vector3.forward * vector2.y + Vector3.right * vector2.x;
+        Transform camera = CenterOverPlayer.Instance.transform;
+
+
+        Vector3 movement = camera.forward * vector2.y + camera.right * vector2.x;
+        /*
+        {
+            0 => camera.forward * vector2.y + camera.right * vector2.x,
+            1 => Vector3.forward * vector2.y + Vector3.right * vector2.x,
+            2 => -Vector3.forward * vector2.y - Vector3.right * vector2.x,
+            3 => Vector3.forward * vector2.y + Vector3.right * vector2.x,
+            _ => Vector3.forward * vector2.y + Vector3.right * vector2.x,
+        };*/
+
         //Vector3 movement = transform.forward * vector2.y + transform.right * vector2.x;
 
         // Instant movement to position
+        
         Vector3 movePosition = transform.position + movement;
 
         // Check if move is legal

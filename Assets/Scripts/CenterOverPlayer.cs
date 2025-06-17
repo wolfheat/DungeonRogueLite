@@ -13,6 +13,9 @@ public class CenterOverPlayer : MonoBehaviour
 		Instance = this;
 	}
 
-    public void Center(Vector3 pos) => transform.position = new Vector3(pos.x, transform.position.y, pos.z);
+    public void Center(Vector3 pos) => transform.position = pos;
+    public void SetRotation(Vector3 forward) => transform.rotation = Quaternion.LookRotation(forward,Vector3.up);
+
+    //public void Center(Vector3 pos) => transform.position = new Vector3(pos.x, transform.position.y, pos.z);
 
 }
