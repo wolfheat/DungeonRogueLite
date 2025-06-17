@@ -150,12 +150,12 @@ public class LevelCreator : MonoBehaviour
 
 
 
-        Debug.Log(tiles.Length+" Floors found");
+        //Debug.Log(tiles.Length+" Floors found");
         if (tiles.Length <= 2) return;
 
         (Vector2Int bottomLeft, Vector2Int topRight) = GetDimensions(tiles);
         offset = bottomLeft;
-        Debug.Log("OFFSET = "+offset);
+        //Debug.Log("OFFSET = "+offset);
 
         levelWidth = topRight.x - bottomLeft.x + 1;
         levelHeight = topRight.y - bottomLeft.y + 1;
@@ -357,7 +357,7 @@ public class LevelCreator : MonoBehaviour
 
     public List<Vector2Int> GetPath(Vector2Int from, Vector2Int to)
     {
-        Debug.Log("** Trying to find a path from "+from+" to "+to);
+        //Debug.Log("** Trying to find a path from "+from+" to "+to);
         PrintLevel();
 
 
@@ -370,6 +370,9 @@ public class LevelCreator : MonoBehaviour
 
         int[,] levelCopy = (int[,])level.Clone();
 
+        // Add Enemies to this copy
+
+        levelCopy = AddEnemiesToLevel(levelCopy);
 
         // Do A*
 
@@ -393,7 +396,7 @@ public class LevelCreator : MonoBehaviour
             //LogWalk(walk);
 
             if (current == target) {
-                Debug.Log("** Target Found at " + current);
+                //Debug.Log("** Target Found at " + current);
                 //LogWalk(walk);
                 return walk;
             }
@@ -404,7 +407,7 @@ public class LevelCreator : MonoBehaviour
 
             // Check all neighbors that are walkable
             List<Vector2Int> neighbors = GetNeighbors(current);
-            Debug.Log("** Found "+neighbors.Count+" neighbors");
+            //Debug.Log("** Found "+neighbors.Count+" neighbors");
             neighbors.Sort((a, b) => (Mathf.Abs(a.x - target.x) + Mathf.Abs(a.y - target.y)).CompareTo(Mathf.Abs(b.x - target.x) + Mathf.Abs(b.y - target.y)));
 
             // Go to all
@@ -414,7 +417,7 @@ public class LevelCreator : MonoBehaviour
                     return ans;
                 }
             }
-            Debug.Log("** No Path found");
+            //Debug.Log("** No Path found");
             // No path found
             return new();
         }
@@ -436,6 +439,20 @@ public class LevelCreator : MonoBehaviour
             }     
             return answer;
         }
+    }
+
+    private int[,] AddEnemiesToLevel(int[,] levelCopy)
+    {
+        EnemyController[] enemies = enemyHolder.gameObject.GetComponentsInChildren<EnemyController>();
+
+        //EnemyController[] enemies = enemyHolder.GetComponentsInChildren<Transform>().Where(x => x.gameObject.GetComponent<EnemyController>() != null).Select(x => x.gameObject.GetComponent<EnemyController>()).ToArray();
+
+
+        foreach (EnemyController enemy in enemies) {
+            Vector2Int pos = Convert.V3ToV2Int(enemy.transform.position);
+            levelCopy[pos.x, pos.y] = 0;
+        }
+        return levelCopy;
     }
 
     private void LogWalk(List<Vector2Int> walk)

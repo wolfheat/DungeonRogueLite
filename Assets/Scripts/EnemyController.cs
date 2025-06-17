@@ -115,10 +115,10 @@ public class EnemyController : MonoBehaviour, IDamageable
             //Debug.Log("PLayer is to far away to be seen by enemy");
         }
 
-        Debug.Log("** Try To Move towards player");
+        //Debug.Log("** Try To Move towards player");
         // Move towards Player
         List<Vector2Int> path = LevelCreator.Instance.GetPath(myPosition,playerTile);
-        Debug.Log("** path "+path.Count);
+        //Debug.Log("** path "+path.Count);
 
         // Move enemy maxsteps towards player
 

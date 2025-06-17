@@ -53,7 +53,13 @@ June 2025
 17/6	* Implemented SectionsData
 		* Implemented Random Generated levels
 		* Fixed issue with enemy pathfinind not working
+		* Fixed enemy pathfinding only allowing one enemy per tile
 
+		
+
+
+		* Make camera rotateable with QE - fix WASD movement from this rotation
+		* Dying wont reset xp nor physical level, just resets to start on current level
 
 
 		
@@ -62,7 +68,7 @@ June 2025
 		* Create a level editor
 		* Create random levels from level parts
 
-		* Create some system for  managing dungeon difficulty compared to player stats
+		* Create some system for  managing dungeon difficulty progression compared to player stats
 
 
 
