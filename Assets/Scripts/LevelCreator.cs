@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -31,6 +32,11 @@ public class LevelCreator : MonoBehaviour
     [SerializeField] private GameObject[] dungeonEntryExitsPrefabs;
 
     [SerializeField] private int currentBiome = 1;
+    
+    [SerializeField] private LayerMask floorMask;
+    [SerializeField] private LayerMask wallMask;
+    [SerializeField] private LayerMask enemyMask;
+
 
 
     private int[,] level;
@@ -57,9 +63,7 @@ public class LevelCreator : MonoBehaviour
 
     void Start()
     {
-        SetLevelFromFloors();
-
-        AddWallsToArray();
+        ReadLevelObjectsIntoArray();
 
         //PrintLevel();
 
@@ -67,12 +71,36 @@ public class LevelCreator : MonoBehaviour
         ResetLevel();
     }
 
+    private void ReadLevelObjectsIntoArray(GameObject prefabToUse = null)
+    {
+        SetLevelFromFloors(prefabToUse);
+
+        AddWallsToArray(prefabToUse);
+    }
+
     private void ResetLevel()
     {
         currentBiome = (Stats.Instance.DungeonLevel-1) % 3;   
         Debug.Log("Biome set to "+currentBiome);
+
+        SetRandomLevelArray();
+        
         CreateLevelFromArray();
+        
         PlayerMovement.Instance.ReturnToStartPosition();
+    }
+
+    private void SetRandomLevelArray()
+    {
+        int sections = 5;
+        Debug.Log("Setting a new level by creating a level data using "+sections+" sections");
+        level = LevelDataController.Instance.GetRandomLevelData(sections);
+        
+        // Create the right size of the array and place the numbers
+        levelWidth = level.GetLength(0);
+        levelHeight = level.GetLength(1);
+        
+        Debug.Log("*** Level is set from generated data");
     }
 
     private void PrintLevel()
@@ -88,7 +116,7 @@ public class LevelCreator : MonoBehaviour
         }
         Debug.Log(sb.ToString());
     }
-    private void PrintLevelCode()
+    private string PrintLevelCode(bool print = true)
     {
 
         StringBuilder sb = new StringBuilder("\n");
@@ -99,19 +127,35 @@ public class LevelCreator : MonoBehaviour
             }
             //sb.Append(j==0?"};\n":",\n");
         }
-        Debug.Log(sb.ToString());   
+        if(print)
+            Debug.Log(sb.ToString());   
+        return sb.ToString();
     }
 
     // SET ARRAY LEVEL FROM OBJECTS
     #region objects->array REGION
-    private void SetLevelFromFloors()
+    private void SetLevelFromFloors(GameObject prefabParent = null)
     {
         // Read all floor pieces and add them to the array with an offset?
+        
 
-        Transform[] tiles = floorHolder.transform.GetComponentsInChildren<Transform>();
+        Transform[] tiles = prefabParent != null ? prefabParent.transform.GetComponentsInChildren<Transform>().Where(x => x.gameObject.layer == LayerMask.NameToLayer("Floor")).ToArray()
+                                                 : floorHolder.transform.GetComponentsInChildren<Transform>().Where(x => x.gameObject.layer == LayerMask.NameToLayer("Floor")).ToArray();
+
+        Transform[] startPortal = prefabParent != null ? prefabParent.transform.GetComponentsInChildren<Transform>().Where(x => x.gameObject.layer == LayerMask.NameToLayer("StartPortal")).ToArray()
+                                                 : floorHolder.transform.GetComponentsInChildren<Transform>().Where(x => x.gameObject.layer == LayerMask.NameToLayer("StartPortal")).ToArray();
+
+        Transform[] exitPortal = prefabParent != null ? prefabParent.transform.GetComponentsInChildren<Transform>().Where(x => x.gameObject.layer == LayerMask.NameToLayer("ExitPortal")).ToArray()
+                                                 : floorHolder.transform.GetComponentsInChildren<Transform>().Where(x => x.gameObject.layer == LayerMask.NameToLayer("ExitPortal")).ToArray();
+
+
+
+        Debug.Log(tiles.Length+" Floors found");
+        if (tiles.Length <= 2) return;
 
         (Vector2Int bottomLeft, Vector2Int topRight) = GetDimensions(tiles);
         offset = bottomLeft;
+        Debug.Log("OFFSET = "+offset);
 
         levelWidth = topRight.x - bottomLeft.x + 1;
         levelHeight = topRight.y - bottomLeft.y + 1;
@@ -123,11 +167,20 @@ public class LevelCreator : MonoBehaviour
             Vector2Int tilePos = Convert.V3ToV2Int(tile.transform.position)-offset;
             level[tilePos.x, tilePos.y] = 1;
         }
+        foreach(var tile in startPortal) {
+            Vector2Int tilePos = Convert.V3ToV2Int(tile.transform.position)-offset;
+            level[tilePos.x, tilePos.y] = 8;
+        }
+        foreach(var tile in exitPortal) {
+            Vector2Int tilePos = Convert.V3ToV2Int(tile.transform.position)-offset;
+            level[tilePos.x, tilePos.y] = 9;
+        }
     }
 
-    private void AddWallsToArray()
+    private void AddWallsToArray(GameObject prefabParent = null)
     {
-        Transform[] tiles = wallsHolder.transform.GetComponentsInChildren<Transform>();
+        Transform[] tiles = prefabParent != null ? prefabParent.transform.GetComponentsInChildren<Transform>().Where(x => x.gameObject.layer == LayerMask.NameToLayer("Wall")).ToArray()
+                                                 : wallsHolder.transform.GetComponentsInChildren<Transform>().Where(x => x.gameObject.layer == LayerMask.NameToLayer("Wall")).ToArray();
         foreach (var tile in tiles) {
             if (tile == wallsHolder.transform) continue;
             Vector2Int tilePos = Convert.V3ToV2Int(tile.transform.position) - offset;
@@ -169,10 +222,12 @@ public class LevelCreator : MonoBehaviour
         PrintLevelCode();
         Debug.Log("");
 
+        /*
         int levelTypeToLoad = (Stats.Instance.DungeonLevel - 1)% LevelDataController.Instance.TotalLevels;
         Debug.Log("Loading Level ID "+levelTypeToLoad+" cause level = "+Stats.Instance.DungeonLevel);
         // Get Data for next level
         level = LevelDataController.Instance.GetLevelData(levelTypeToLoad);
+        */
 
         // Enemies placed
         PlaceEnemies(10,0);
@@ -184,7 +239,9 @@ public class LevelCreator : MonoBehaviour
         offset = Vector2Int.zero;
 
         Debug.Log("CREATING ALL NEW TILES");
+        
         PlacePortals();
+
         AddFloors();
         AddWalls();
     }
@@ -213,20 +270,27 @@ public class LevelCreator : MonoBehaviour
 
     private void PlacePortals()
     {
+        // Method that Finds all of an index and replace these with floors = 1 and returns one of them at random
+
+        // Player portal
         dungeonEntryExitsPrefabs[0].transform.position = FindPortalPosition(8);
+        // Exit Portal
         dungeonEntryExitsPrefabs[1].transform.position = FindPortalPosition(9);
     }
 
     private Vector3 FindPortalPosition(int index)
     {
+        List<Vector2Int> positions = new List<Vector2Int>();
+        // finds all of this type and set them to floor tile but sending back one
         for (int i = 0; i < level.GetLength(0); i++) {
             for (int j = 0; j < level.GetLength(1); j++) {
                 if (level[i, j] != index) continue;
                 level[i, j] = 1; // Overwrite with floortile for next steps
-                return new Vector3(i,0,j);
+                positions.Add(new Vector2Int(i, j));
             }
         }
-        return Vector3.zero;
+        
+        return positions.Count > 0 ? Convert.V2IntToV3(positions[UnityEngine.Random.Range(0,positions.Count)]) : new Vector3();
     }
 
     // Adding tiles
@@ -293,14 +357,16 @@ public class LevelCreator : MonoBehaviour
 
     public List<Vector2Int> GetPath(Vector2Int from, Vector2Int to)
     {
-        //Debug.Log("Trying to find a path from "+from+" to "+to);
-        //PrintLevel();
+        Debug.Log("** Trying to find a path from "+from+" to "+to);
+        PrintLevel();
 
 
 
         // Make sure the positions are normalized
         from -= offset;
         to -= offset;
+
+        Debug.Log("** From "+from+" to "+to);
 
         int[,] levelCopy = (int[,])level.Clone();
 
@@ -327,7 +393,7 @@ public class LevelCreator : MonoBehaviour
             //LogWalk(walk);
 
             if (current == target) {
-                //Debug.Log("Target Found at " + current);
+                Debug.Log("** Target Found at " + current);
                 //LogWalk(walk);
                 return walk;
             }
@@ -338,9 +404,9 @@ public class LevelCreator : MonoBehaviour
 
             // Check all neighbors that are walkable
             List<Vector2Int> neighbors = GetNeighbors(current);
+            Debug.Log("** Found "+neighbors.Count+" neighbors");
             neighbors.Sort((a, b) => (Mathf.Abs(a.x - target.x) + Mathf.Abs(a.y - target.y)).CompareTo(Mathf.Abs(b.x - target.x) + Mathf.Abs(b.y - target.y)));
 
-            // Order These Later?
             // Go to all
             foreach (Vector2Int neighbor in neighbors) {
                 List<Vector2Int> ans = WalkPath(neighbor, target, newWalk, cost + 1);
@@ -348,6 +414,7 @@ public class LevelCreator : MonoBehaviour
                     return ans;
                 }
             }
+            Debug.Log("** No Path found");
             // No path found
             return new();
         }
@@ -383,4 +450,14 @@ public class LevelCreator : MonoBehaviour
 
     }
 
+    internal string GetLevelAsSegment(GameObject prefabParent)
+    {
+        ReadLevelObjectsIntoArray(prefabParent);
+        return PrintLevelCode(false);
+    }
+    internal string GetLevelAsSegment()
+    {
+        ReadLevelObjectsIntoArray();
+        return PrintLevelCode(false);
+    }
 }

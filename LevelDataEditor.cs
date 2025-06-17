@@ -18,8 +18,6 @@ public class LevelDataEditor : Editor
 
     public override void OnInspectorGUI()
     {
-        DrawDefaultInspector();
-
         //LevelData data = (LevelData)target;
         BaseLevelData data = (BaseLevelData)target;
 

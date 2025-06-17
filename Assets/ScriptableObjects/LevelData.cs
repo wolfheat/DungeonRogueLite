@@ -1,10 +1,8 @@
 ﻿using UnityEngine;
 
 [CreateAssetMenu(fileName = "Level", menuName = "LevelData")]
-public class LevelData : ScriptableObject
+public class LevelData : BaseLevelData
 {
-    [TextArea(5, 20)]  // Min and max lines shown
-    public string LevelString;
     public int[,] Level => ParseLevel(LevelString);
 
         private static int[,] ParseLevel(string data)

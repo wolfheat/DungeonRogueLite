@@ -49,6 +49,31 @@ June 2025
 15/6	* LevelData files added
 		* Active Dungeon Level indicator UI added
 		* Some levels Added, loops around
+16/6	[Jam failed]
+17/6	* Implemented SectionsData
+		* Implemented Random Generated levels
+		* Fixed issue with enemy pathfinind not working
+
+
+
+		
+		* Post mortem jam fail
+
+		* Create a level editor
+		* Create random levels from level parts
+
+		* Create some system for  managing dungeon difficulty compared to player stats
+
+
+
+
+
+
+
+		[  		]
+		[<		]
+		[ V   V ]
+		 
 
 		// Decide how to refill health - timer or potions?
 		// Implement ORBs upgrades after deaths
