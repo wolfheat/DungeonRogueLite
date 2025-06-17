@@ -19,13 +19,15 @@ public class IngameHealthBar : MonoBehaviour
         // Make the item face the camera
         Vector3 directionToCamera = cameraTransform.position - transform.position;
 
-        directionToCamera.x = 0;
+        Vector3 forward = CenterOverPlayer.Instance.transform.forward;
+
+        //directionToCamera.x = 0;
 
         // Keep the object upright (ignore Y axis rotation)
         //directionToCamera.y = 0;
 
         // Apply rotation to face the camera
-        transform.forward = directionToCamera;
+        transform.forward = -forward;
     }
     public void UpdateHealthBar(int current, int max)
     {

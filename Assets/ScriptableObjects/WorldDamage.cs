@@ -35,7 +35,8 @@ public class WorldDamage : MonoBehaviour
     private void FacePlayer()
     {
         // Make the item face the camera
-        Vector3 directionToCamera = Camera.main.transform.position - transform.position;
+        Vector3 directionToCamera = -CenterOverPlayer.Instance.transform.forward;
+        //Vector3 directionToCamera = Camera.main.transform.position - transform.position;
 
         //directionToCamera.x = 0;
 

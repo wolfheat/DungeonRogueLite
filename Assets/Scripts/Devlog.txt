@@ -55,14 +55,13 @@ June 2025
 		* Fixed issue with enemy pathfinind not working
 		* Fixed enemy pathfinding only allowing one enemy per tile
 		* Added rotations for the player
+		* Healthbar and damage roatates to face camera
 
 
-		* Need to fix enemy healthbars when rotated
-		
 
+		* Maybe - make damage and health bar face camera even when camera rotates
 
-		* Make camera rotateable with QE - fix WASD movement from this rotation
-		* Dying wont reset xp nor physical level, just resets to start on current level
+		* Make wont reset xp nor physical level, just resets to start on current level
 
 
 		
