@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -29,7 +28,9 @@ public class LevelCreator : MonoBehaviour
     [Header("Walls")]
     [SerializeField] private GameObject[] wallPrefabs;
     [Header("Portals")]
-    [SerializeField] private GameObject[] dungeonEntryExitsPrefabs;
+    [SerializeField] private GameObject[] dungeonPortals;
+
+    public Vector3 StartPosition => dungeonPortals[0].transform.position;
 
     [SerializeField] private int currentBiome = 1;
     
@@ -86,8 +87,11 @@ public class LevelCreator : MonoBehaviour
         SetRandomLevelArray();
         
         CreateLevelFromArray();
-        
-        PlayerMovement.Instance.ReturnToStartPosition();
+
+        //StartCoroutine(PlayerMovement.Instance.ReturnToStartPosition());
+
+        //PlayerMovement.Instance.Reset();
+
     }
 
     private void SetRandomLevelArray()
@@ -244,6 +248,13 @@ public class LevelCreator : MonoBehaviour
 
         AddFloors();
         AddWalls();
+
+        // Send back player to start position?
+        //StartCoroutine(PlayerMovement.Instance.ReturnToStartPosition());
+
+        Debug.Log("ALIGNING PLAYER");
+        //PlayerMovement.Instance.ReturnToStartPosition();
+        PlayerMovement.Instance.Reset();
     }
 
     private void PlaceEnemies(int amt, int enemyType)
@@ -273,9 +284,11 @@ public class LevelCreator : MonoBehaviour
         // Method that Finds all of an index and replace these with floors = 1 and returns one of them at random
 
         // Player portal
-        dungeonEntryExitsPrefabs[0].transform.position = FindPortalPosition(8);
+        dungeonPortals[0].transform.position = FindPortalPosition(8);
+        Debug.Log("Entry set to "+ dungeonPortals[0].transform.position);
         // Exit Portal
-        dungeonEntryExitsPrefabs[1].transform.position = FindPortalPosition(9);
+        dungeonPortals[1].transform.position = FindPortalPosition(9);
+        Debug.Log("Exit set to "+ dungeonPortals[1].transform.position);
     }
 
     private Vector3 FindPortalPosition(int index)

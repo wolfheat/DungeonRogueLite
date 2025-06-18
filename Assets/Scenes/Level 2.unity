@@ -43504,7 +43504,7 @@ MonoBehaviour:
   - {fileID: 3169270122683989034, guid: c464e5afe6890d54bb733a69ec3e6ce9, type: 3}
   - {fileID: 6335927946148222006, guid: ae57ae8014bfa244db6510c22394ea1b, type: 3}
   - {fileID: 3874297382800638590, guid: 2553d2f826cad824ba6c15519b1c5d4c, type: 3}
-  dungeonEntryExitsPrefabs:
+  dungeonPortals:
   - {fileID: 551751822}
   - {fileID: 1267757941}
   currentBiome: 1

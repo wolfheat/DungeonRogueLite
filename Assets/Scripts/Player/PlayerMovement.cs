@@ -1,16 +1,18 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Wolfheat.StartMenu;
+using static UnityEditor.PlayerSettings;
 
 public class PlayerMovement : MonoBehaviour
 {
 
     public static PlayerMovement Instance { get; private set; }
 
-    Vector3 forward = Vector3.forward;
-    int forwardIndex = 0;
-
+    private Vector3 forward = Vector3.forward;
+    private int rotation = 0;
+    
     private void Awake()
     {
         if (Instance != null) {
@@ -28,14 +30,13 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
-    public void ReturnToStartPosition()
+    public IEnumerator ReturnToStartPosition()
     {
-        // Find starter
-        Vector3 startposition = FindFirstObjectByType<StartPosition>().transform.position;
+        Debug.Log("ReturnToStartPosition wait 0.1s");
+        yield return new WaitForSeconds(0.1f);
 
-        transform.position = Convert.Align(startposition);
+        Debug.Log("Setting player to startposition at "+ LevelCreator.Instance.StartPosition);
 
-        CenterOverPlayer.Instance.Center(transform.position);
     }
 
     private void OnDisable()
@@ -80,15 +81,27 @@ public class PlayerMovement : MonoBehaviour
         TurnPlayer(context.ReadValue<float>());
     }
 
+    public void Reset()
+    {
+        Debug.Log("** Resetting player **");
+        StopAllCoroutines();
+        forward = Vector3.forward;
+        rotation = 0;
+        
+        // Instantly set player position
+        transform.position = Convert.Align(LevelCreator.Instance.StartPosition);
+
+        CenterOverPlayer.Instance.ResetToPosition(transform.position);
+    }
     private void TurnPlayer(float v)
     {
-        Debug.Log("Turning Player");
+        Debug.Log("** Turning Player rotationIndex was "+rotation);
 
         // Rotate here
-        forwardIndex = (forwardIndex +(v > 0 ? 1 : 3)) % 4;
-        Debug.Log("Forward index becomes" + forwardIndex);
+        rotation = (rotation +(v > 0 ? 1 : 3)) % 4;
+        Debug.Log("** Forward index becomes" + rotation);
 
-        forward = forwardIndex switch
+        forward = rotation switch
         {
             0 => Vector3.forward,
             1 => Vector3.right,
@@ -121,19 +134,10 @@ public class PlayerMovement : MonoBehaviour
 
 
         Vector3 movement = camera.forward * vector2.y + camera.right * vector2.x;
-        /*
-        {
-            0 => camera.forward * vector2.y + camera.right * vector2.x,
-            1 => Vector3.forward * vector2.y + Vector3.right * vector2.x,
-            2 => -Vector3.forward * vector2.y - Vector3.right * vector2.x,
-            3 => Vector3.forward * vector2.y + Vector3.right * vector2.x,
-            _ => Vector3.forward * vector2.y + Vector3.right * vector2.x,
-        };*/
-
-        //Vector3 movement = transform.forward * vector2.y + transform.right * vector2.x;
+        
 
         // Instant movement to position
-        
+
         Vector3 movePosition = transform.position + movement;
 
         // Check if move is legal
@@ -143,14 +147,37 @@ public class PlayerMovement : MonoBehaviour
 
 
         // Center
-        transform.position = Convert.Align(movePosition);
+        movePosition = Convert.Align(movePosition);
 
-        CenterOverPlayer.Instance.Center(transform.position);
-
+        TweenMovement(movePosition);
+                
         SoundMaster.Instance.PlayStepSound(3);
 
         // Have player action end call a tick
         TickManager.Instance.TickRequest();
+    }
+
+    private void TweenMovement(Vector3 movement)
+    {
+        StartCoroutine(TweenToPosition(movement));
+
+        //transform.rotation = Quaternion.LookRotation(forward, Vector3.up);
+
+        IEnumerator TweenToPosition(Vector3 forward)
+        {
+            Vector3 startPosition = transform.position;
+            Vector3 endPosition = movement;
+            float tweenTime = 0.04f;
+            float timer = 0f;
+            while (timer < tweenTime) {
+                timer += Time.deltaTime;
+                float t = timer / tweenTime;
+                transform.position = Vector3.Lerp(startPosition, endPosition, t);
+                CenterOverPlayer.Instance.Center(transform.position);
+                yield return null;
+            }
+            transform.position = endPosition;
+        }
     }
 
     private void SideStep(InputAction.CallbackContext context)

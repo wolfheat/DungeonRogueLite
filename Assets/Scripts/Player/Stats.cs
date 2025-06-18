@@ -33,7 +33,7 @@ public class Stats : MonoBehaviour,IDamageable
     public int DungeonLevel { get; private set; } = 1;
     public int Coins { get; private set; } = 0;
 
-    
+
     public int BaseDamage { get; private set; } = 1;
     public int MovementSpeed { get; private set; } = 1;
     public int SightDistance { get; private set; } = 1;
@@ -122,15 +122,18 @@ public class Stats : MonoBehaviour,IDamageable
         Debug.Log("Stats RESET");
         Health = MaxHealth;
         MP = MaxMP;
+
         Level = 1;
         DungeonLevel = 1;
         EnemiesKilled = 0;
         IsDead = false;
+
         StatsUpdated?.Invoke();
 
-        // Send back player to start position?
-        PlayerMovement.Instance.ReturnToStartPosition();
+        PlayerMovement.Instance.Reset();
 
+        // Send back player to start position?
+        //StartCoroutine(PlayerMovement.Instance.ReturnToStartPosition());
     }
 
     internal void ChangeCharacterData(CharacterClassData characterClassData)
