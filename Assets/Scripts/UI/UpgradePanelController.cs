@@ -41,6 +41,9 @@ public class UpgradePanelController : MonoBehaviour
     private void InitPanel()
     {
         availablePoints = Stats.Instance.AvailableUpgradePoints;
+        upgrades = new int[4];
+
+        Debug.Log("** INIT Upgrade panel, available points = "+availablePoints);
 
         // Update the image and type
         characterType.text = Stats.Instance.ActiveCharacter?.CharacterType.ToString();

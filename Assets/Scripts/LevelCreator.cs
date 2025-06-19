@@ -72,9 +72,9 @@ public class LevelCreator : MonoBehaviour
         ResetLevel();
     }
 
-    private void ReadLevelObjectsIntoArray(GameObject prefabToUse = null)
+    private void ReadLevelObjectsIntoArray(GameObject prefabToUse = null,bool unset = false)
     {
-        SetLevelFromFloors(prefabToUse);
+        SetLevelFromFloors(prefabToUse,unset);
 
         AddWallsToArray(prefabToUse);
     }
@@ -96,7 +96,7 @@ public class LevelCreator : MonoBehaviour
 
     private void SetRandomLevelArray()
     {
-        int sections = 5;
+        int sections = 6;
         Debug.Log("Setting a new level by creating a level data using "+sections+" sections");
         level = LevelDataController.Instance.GetRandomLevelData(sections);
         
@@ -138,7 +138,7 @@ public class LevelCreator : MonoBehaviour
 
     // SET ARRAY LEVEL FROM OBJECTS
     #region objects->array REGION
-    private void SetLevelFromFloors(GameObject prefabParent = null)
+    private void SetLevelFromFloors(GameObject prefabParent = null,bool unset = false)
     {
         // Read all floor pieces and add them to the array with an offset?
         
@@ -164,11 +164,14 @@ public class LevelCreator : MonoBehaviour
         levelWidth = topRight.x - bottomLeft.x + 1;
         levelHeight = topRight.y - bottomLeft.y + 1;
 
+        Vector2Int topRightIndex = new Vector2Int(levelWidth-1, levelHeight-1);
+
         // Create the right size of the array and place the numbers
         level = new int[levelWidth, levelHeight];
 
         foreach(var tile in tiles) {
             Vector2Int tilePos = Convert.V3ToV2Int(tile.transform.position)-offset;
+            if (tilePos == Vector2Int.zero || tilePos == topRightIndex) continue;
             level[tilePos.x, tilePos.y] = 1;
         }
         foreach(var tile in startPortal) {
@@ -232,6 +235,12 @@ public class LevelCreator : MonoBehaviour
         // Get Data for next level
         level = LevelDataController.Instance.GetLevelData(levelTypeToLoad);
         */
+
+        // Creating Level
+
+        Debug.Log("Level "+Stats.Instance.DungeonLevel+" generated difficulty = "+Stats.Instance.Difficulty);
+
+
 
         // Enemies placed
         PlaceEnemies(10,0);
@@ -480,9 +489,9 @@ public class LevelCreator : MonoBehaviour
 
     }
 
-    internal string GetLevelAsSegment(GameObject prefabParent)
+    internal string GetLevelAsSegment(GameObject prefabParent,bool unset = false)
     {
-        ReadLevelObjectsIntoArray(prefabParent);
+        ReadLevelObjectsIntoArray(prefabParent,unset);
         return PrintLevelCode(false);
     }
     internal string GetLevelAsSegment()

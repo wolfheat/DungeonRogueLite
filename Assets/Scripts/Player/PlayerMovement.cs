@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Wolfheat.StartMenu;
-using static UnityEditor.PlayerSettings;
+using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -12,7 +12,10 @@ public class PlayerMovement : MonoBehaviour
 
     private Vector3 forward = Vector3.forward;
     private int rotation = 0;
-    
+    [SerializeField] private LayerMask enemyLayer; 
+
+    public bool PerformingAction { get; set; } = false;
+
     private void Awake()
     {
         if (Instance != null) {
@@ -20,6 +23,7 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
         Instance = this;
+        PerformingAction = false;
     }
 
     private void Start()
@@ -51,29 +55,49 @@ public class PlayerMovement : MonoBehaviour
     private void LookAtMouse()
     {
         if (Stats.Instance.IsDead || Stats.Instance.IsPaused) return;
-            
+
         // Step 1: Get the mouse position in screen space
         Vector2 mouseScreenPosition = Mouse.current.position.ReadValue();
 
         // Step 2: Create a ray from the camera through the mouse position
         Ray ray = Camera.main.ScreenPointToRay(mouseScreenPosition);
+        RaycastHit hit;
 
-        // Step 3: Create a plane at y = 0 (the ground)
-        Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
+        Vector3 tileAimPosition = Vector3.zero;
 
-        // Step 4: Find the point where the ray hits the ground plane
-        if (groundPlane.Raycast(ray, out float enter)) {
-            Vector3 mouseWorldPosition = ray.GetPoint(enter);
 
-            // Show position in game
-            MousePositionInGame.Instance.transform.position = mouseWorldPosition;
 
-            // Step 5: Calculate direction from player to mouse
-            Vector3 lookDirection = mouseWorldPosition - transform.position;
+        // Find Enemy under cursor
+        if (Physics.Raycast(ray, out hit, 20f, enemyLayer)) {
+            GameObject enemy = hit.collider.gameObject;
+            Debug.Log("Enemy hit: " + enemy.name);
 
-            // Step 6: Apply rotation
-            transform.rotation = Quaternion.LookRotation(lookDirection, Vector3.up);
-        }        
+            tileAimPosition = enemy.transform.position;
+
+
+        }
+        else {
+            // Step 3: Create a plane at y = 0 (the ground)
+            Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
+
+            // Step 4: Find the point where the ray hits the ground plane
+            if (groundPlane.Raycast(ray, out float enter)) {
+                tileAimPosition = ray.GetPoint(enter);
+
+                // Show position in game
+                MousePositionInGame.Instance.transform.position = tileAimPosition;
+            }        
+        }
+
+        // Show position in game
+        MousePositionInGame.Instance.transform.position = tileAimPosition;
+
+        // Step 5: Calculate direction from player to mouse
+        Vector3 lookDirection = tileAimPosition - transform.position;
+
+        // Step 6: Apply rotation
+        transform.rotation = Quaternion.LookRotation(lookDirection, Vector3.up);
+
     }
 
     private void Turn(InputAction.CallbackContext context)
@@ -87,8 +111,10 @@ public class PlayerMovement : MonoBehaviour
         StopAllCoroutines();
         forward = Vector3.forward;
         rotation = 0;
-        
+        PerformingAction = false;
+
         // Instantly set player position
+        Debug.Log("** Setting Player position instantly **");
         transform.position = Convert.Align(LevelCreator.Instance.StartPosition);
 
         CenterOverPlayer.Instance.ResetToPosition(transform.position);
@@ -120,7 +146,9 @@ public class PlayerMovement : MonoBehaviour
     private void Move(InputAction.CallbackContext context)
     {
         if (Stats.Instance.IsDead || Stats.Instance.IsPaused) return;
-
+        
+        
+        if (PerformingAction) return;
         
         //Debug.Log("Player Moving "+context.action.ReadValue<Vector2>());
         MovePlayer(context.action.ReadValue<Vector2>());
@@ -143,28 +171,47 @@ public class PlayerMovement : MonoBehaviour
         // Check if move is legal
         bool legal = PlayerColliderController.Instance.CheckIfLegalMoveTo(movePosition);
 
-        if (!legal) return;
-
+        if (!legal) {
+            return;
+        }
 
         // Center
         movePosition = Convert.Align(movePosition);
 
+        Debug.Log("Tweening to "+movePosition);
         TweenMovement(movePosition);
                 
         SoundMaster.Instance.PlayStepSound(3);
 
         // Have player action end call a tick
         TickManager.Instance.TickRequest();
+
+
+    }
+
+    private void CheckForHold()
+    {
+        if (PerformingAction) return;
+
+        Vector2 held = Inputs.Instance.PlayerControls.Player.Move.ReadValue<Vector2>();
+
+        if (held.x == 0 && held.y == 0) return;
+        Debug.Log("Continious held input");
+        MovePlayer(held);
     }
 
     private void TweenMovement(Vector3 movement)
     {
+        Debug.Log("Performing action TRUE");
+        PerformingAction = true;
+
         StartCoroutine(TweenToPosition(movement));
 
         //transform.rotation = Quaternion.LookRotation(forward, Vector3.up);
 
         IEnumerator TweenToPosition(Vector3 forward)
         {
+            Debug.Log("TWEEN MOVEMENT");
             Vector3 startPosition = transform.position;
             Vector3 endPosition = movement;
             float tweenTime = 0.04f;
@@ -177,7 +224,12 @@ public class PlayerMovement : MonoBehaviour
                 yield return null;
             }
             transform.position = endPosition;
+            yield return new WaitForSeconds(0.1f);
+            PerformingAction = false;
+            Debug.Log("Performing action FALSE");
+            CheckForHold();
         }
+        
     }
 
     private void SideStep(InputAction.CallbackContext context)

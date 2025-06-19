@@ -58,10 +58,25 @@ June 2025
 		* Healthbar and damage rotates to face camera
 18/6	* Added tween for player movement and rotation
 		* Resetting player works
+		* Added continious movement
+19/6	* Added Caps for segments Up and down
+		* Hovering over enemy now targets its tile before checking floor tile
+
+
+		* Make continious attacking if hover over enemy with mouse button held
+
+		* Make targeting enemy when above enemy first then tile
+
+		* Add continious Attacking?
+
+		* Add XP gained game text showing
+
+		* Add projectile and holding bow and sword animation
+		
+		* Add boundery segments that ends stuff?
 
 
 		* Fix upgrade system - upgrade points seems to add on each time?
-
 
 		* Maybe - make damage and health bar face camera even when camera rotates
 

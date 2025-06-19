@@ -36,5 +36,16 @@ public class SegmentData : BaseLevelData
             LevelString = FindFirstObjectByType<LevelCreator>().GetLevelAsSegment();
     }
 
+    
+    [ContextMenu("ReadInWorldAsSegmentData_UnsetCorners")]
+    public void ReadInWorldAsSegmentData_UsetCorners()
+    {
+        Debug.Log("Reading new Segment data from world.");
+        if(SegmentPrefab != null)
+            LevelString = FindFirstObjectByType<LevelCreator>().GetLevelAsSegment(SegmentPrefab,true);
+        else
+            LevelString = FindFirstObjectByType<LevelCreator>().GetLevelAsSegment();
+    }
+
 
 }

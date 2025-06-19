@@ -17,8 +17,8 @@ public class CenterOverPlayer : MonoBehaviour
 
     public void ResetToPosition(Vector3 pos)
 	{
-		Debug.Log("Centering over player looking forward");
-		transform.position = pos;
+		Debug.Log("** Setting Camera position and rotation instantly **");
+        transform.position = pos;
         transform.rotation = Quaternion.LookRotation(Vector3.forward,Vector3.up);
 	}
 

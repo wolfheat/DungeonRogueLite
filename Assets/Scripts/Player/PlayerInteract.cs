@@ -16,9 +16,24 @@ public class PlayerInteract : MonoBehaviour
         Inputs.Instance.PlayerControls.Player.Click.performed += OnPlayerClick;
     }
 
-    private void OnPlayerClick(InputAction.CallbackContext context)
+    public void AnyAttackCompleted()
+    {
+        PlayerMovement.Instance.PerformingAction = false;
+        Debug.Log("Performing action Click FALSE");
+
+        // Check if player is holding the attack?
+        if (Inputs.Instance.PlayerControls.Player.Click.ReadValue<float>() != 0) {
+            Debug.Log("Player Is holding mouse attack");
+            OnPlayerClick();
+        }
+    }
+
+    private void OnPlayerClick(InputAction.CallbackContext context) => OnPlayerClick();
+    private void OnPlayerClick()
     {
         if (Stats.Instance.IsDead) return;
+        if (PlayerMovement.Instance.PerformingAction) return;
+
         //Debug.Log("Player Clicks");
         //Debug.Log("Selector is at " + tileSelector.transform.position);
         //Debug.Log("Selector is at " + Convert.V3ToV2Int(tileSelector.transform.position));
@@ -47,6 +62,9 @@ public class PlayerInteract : MonoBehaviour
             if (EquippedManager.Instance.EquippedRangedWeapon()) {
                 Debug.Log("Bow Attack");
                 
+                // Start Attacking
+                PlayerMovement.Instance.PerformingAction = true;
+                Debug.Log("Performing action Click TRUE");
                 PlayerAnimation.Instance.PlayAnimation(AnimationType.AttackBow);
 
                 // Do attack the enemy if there is one here
@@ -55,6 +73,7 @@ public class PlayerInteract : MonoBehaviour
                     Stats.Instance.AddEnemyKilled(enemy.Data.XP);
                 }
                 else {
+
                     // Change this to sound for ranged damage
                     SoundMaster.Instance.PlayWeaponHitEnemy();
                 }
@@ -67,6 +86,9 @@ public class PlayerInteract : MonoBehaviour
 
             Debug.Log("Melee Attack");
 
+            // Start Attacking
+            PlayerMovement.Instance.PerformingAction = true;
+            Debug.Log("Performing action Click TRUE"); 
             PlayerAnimation.Instance.PlayAnimation(AnimationType.Attack1h);
 
             // Do attack the enmy if there is one here

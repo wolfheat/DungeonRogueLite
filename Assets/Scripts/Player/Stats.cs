@@ -27,7 +27,7 @@ public class Stats : MonoBehaviour,IDamageable
     
     public int MP { get; private set; } = 100;
     public int MaxMP { get; private set; } = 100;
-    public int AvailableUpgradePoints { get; private set; } = 4;
+    public int AvailableUpgradePoints { get; private set; } = 0;
 
     public int Level { get; private set; } = 1;
     public int DungeonLevel { get; private set; } = 1;
@@ -53,6 +53,8 @@ public class Stats : MonoBehaviour,IDamageable
     public int MeleeDamage => BaseDamage + (int)((BaseStrength+ ItemStrength) *0.8f);
     public int RangeDamage => BaseDamage + (int)((BaseIntelligence+ItemIntelligence)*0.8f);
 
+    public float BaseDifficulty => 10f;
+    public float Difficulty => BaseDifficulty + DungeonLevel * 2;
 
     public static Action StatsUpdated;
     public static Action CharacterUpdated;
@@ -171,6 +173,8 @@ public class Stats : MonoBehaviour,IDamageable
         BaseIntelligence += upgrades[2];
 
         BaseWillpower += upgrades[3];
+
+        AvailableUpgradePoints = 0;
 
         // 1 Strength = 1 Strength
         // 1 Stamina = 5 Health
