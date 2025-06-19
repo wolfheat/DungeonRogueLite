@@ -11,6 +11,7 @@ public class ItemSpawner : MonoBehaviour
 
     [SerializeField] private WorldItem worldItemPrefab; 
     [SerializeField] private WorldDamage worldDamagePrefab; 
+    [SerializeField] private WorldDamage worldXPPrefab; 
 
     [SerializeField] private UIItem UIItemPrefab; 
     [SerializeField] private EnemyController[] enemyPrefabs; 
@@ -41,6 +42,14 @@ public class ItemSpawner : MonoBehaviour
         WorldDamage worldDamage = Instantiate(worldDamagePrefab);
         worldDamage.transform.position = pos + Vector3.up*1.5f;
         worldDamage.StartText(damage);
+    }
+    
+    internal void SpawnWorldXP(int xp, Vector3 pos)
+    {
+        //Debug.Log("Spawning damage text "+damage+" at "+pos);
+        WorldDamage worldDamage = Instantiate(worldXPPrefab);
+        worldDamage.transform.position = pos + Vector3.up*1.5f;
+        worldDamage.StartText(xp," XP");
     }
     
     internal UIItem SpawnUIItem(ItemData data)

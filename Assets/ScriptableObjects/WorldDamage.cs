@@ -9,15 +9,15 @@ public class WorldDamage : MonoBehaviour
     [SerializeField] private float speed;
     [SerializeField] private float life;
     
-    public void StartText(int amt)
+    public void StartText(int amt,string appendix = "")
     {
         SizeText(amt);
 
-        damageText.text = amt.ToString();
+        damageText.text = amt.ToString()+appendix;
         FacePlayer();
         StartCoroutine(AnimateText());
     }
-
+    
     private void SizeText(int amt)
     {
         float scaling = amt switch

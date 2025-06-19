@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3461458565585738085}
   - component: {fileID: 8672054158051524064}
   m_Layer: 8
-  m_Name: WorldDamage
+  m_Name: WorldXP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -112,8 +112,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4286343918
-  m_fontColor: {r: 0.9333334, g: 0.41568628, b: 0.48627454, a: 1}
+    rgba: 4286505215
+  m_fontColor: {r: 1, g: 0.87843144, b: 0.49411762, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:

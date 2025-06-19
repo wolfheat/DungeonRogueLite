@@ -61,15 +61,10 @@ June 2025
 		* Added continious movement
 19/6	* Added Caps for segments Up and down
 		* Hovering over enemy now targets its tile before checking floor tile
+		* Added XP gained text
 
 
 		* Make continious attacking if hover over enemy with mouse button held
-
-		* Make targeting enemy when above enemy first then tile
-
-		* Add continious Attacking?
-
-		* Add XP gained game text showing
 
 		* Add projectile and holding bow and sword animation
 		

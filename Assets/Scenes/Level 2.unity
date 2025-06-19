@@ -20764,6 +20764,7 @@ MonoBehaviour:
   enemyHolder: {fileID: 28119101}
   worldItemPrefab: {fileID: 1619095497491008361, guid: ce8bab547db13e6438ea643c5f45547e, type: 3}
   worldDamagePrefab: {fileID: 8672054158051524064, guid: f743d0d16ca1d5f4a9957ccd6c80ac79, type: 3}
+  worldXPPrefab: {fileID: 8672054158051524064, guid: 1b92c58c3a04e96489381317bfa79594, type: 3}
   UIItemPrefab: {fileID: 1224299470469361109, guid: 1b359fdf58dec054f91ed226a2ce3097, type: 3}
   enemyPrefabs:
   - {fileID: 2681981460532177851, guid: 8d8042d9a3426624ba34dbafe4462c0d, type: 3}

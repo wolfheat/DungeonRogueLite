@@ -238,6 +238,8 @@ public class EnemyController : MonoBehaviour, IDamageable
         if (health < 0) {
             health = 0;
             Debug.Log("Enemy Dies");
+            ItemSpawner.Instance.SpawnWorldXP(data.XP, transform.position);
+
             StartCoroutine(DeathCoroutine());
             return true;
         }
