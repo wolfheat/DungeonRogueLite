@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: Sword
   m_EditorClassIdentifier: 
   ItemName: Rusty Sword
-  EquipmentType: 4
+  EquipmentType: 0
   Picture: {fileID: 21300000, guid: 73160b493b4fad6478b03d02127247cf, type: 3}
   Strength: 4
   Stamina: 0
   Intelligence: 0
   Willpower: 0
+  value: 10

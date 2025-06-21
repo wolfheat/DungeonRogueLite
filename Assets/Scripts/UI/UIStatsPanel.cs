@@ -4,6 +4,7 @@ using UnityEngine;
 public class UIStatsPanel : MonoBehaviour
 {
 
+    [Header("General Stats")]
     [SerializeField] private TextMeshProUGUI healthInfo;
     [SerializeField] private TextMeshProUGUI levelInfo;
     [SerializeField] private TextMeshProUGUI dungeonLevelInfo;
@@ -11,6 +12,7 @@ public class UIStatsPanel : MonoBehaviour
     [SerializeField] private TextMeshProUGUI experience;
     [SerializeField] private TextMeshProUGUI coins;
 
+    [Header("Upgrades Stats")]
     [SerializeField] private TextMeshProUGUI strength;
     [SerializeField] private TextMeshProUGUI stamina;
     [SerializeField] private TextMeshProUGUI intelligence;

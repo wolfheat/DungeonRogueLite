@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: Copper Ring
   m_EditorClassIdentifier: 
   ItemName: Copper Ring
-  EquipmentType: 3
+  EquipmentType: 5
   Picture: {fileID: 21300000, guid: b86ee3d6f3fc784438acb4900c196487, type: 3}
   Strength: 0
   Stamina: 0
   Intelligence: 2
   Willpower: 0
+  value: 10

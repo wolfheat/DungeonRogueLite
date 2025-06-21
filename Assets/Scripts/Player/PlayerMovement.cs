@@ -70,7 +70,7 @@ public class PlayerMovement : MonoBehaviour
         // Find Enemy under cursor
         if (Physics.Raycast(ray, out hit, 20f, enemyLayer)) {
             GameObject enemy = hit.collider.gameObject;
-            Debug.Log("Enemy hit: " + enemy.name);
+            //Debug.Log("Enemy hit: " + enemy.name);
 
             tileAimPosition = enemy.transform.position;
 
@@ -107,25 +107,25 @@ public class PlayerMovement : MonoBehaviour
 
     public void Reset()
     {
-        Debug.Log("** Resetting player **");
+        //Debug.Log("** Resetting player **");
         StopAllCoroutines();
         forward = Vector3.forward;
         rotation = 0;
         PerformingAction = false;
 
         // Instantly set player position
-        Debug.Log("** Setting Player position instantly **");
+        //Debug.Log("** Setting Player position instantly **");
         transform.position = Convert.Align(LevelCreator.Instance.StartPosition);
 
         CenterOverPlayer.Instance.ResetToPosition(transform.position);
     }
     private void TurnPlayer(float v)
     {
-        Debug.Log("** Turning Player rotationIndex was "+rotation);
+        //Debug.Log("** Turning Player rotationIndex was "+rotation);
 
         // Rotate here
         rotation = (rotation +(v > 0 ? 1 : 3)) % 4;
-        Debug.Log("** Forward index becomes" + rotation);
+        //Debug.Log("** Forward index becomes" + rotation);
 
         forward = rotation switch
         {
@@ -135,7 +135,7 @@ public class PlayerMovement : MonoBehaviour
             3 => -Vector3.right,
             _ => Vector3.forward
         };
-        Debug.Log("Turning to forward "+forward);
+        //Debug.Log("Turning to forward "+forward);
 
         CenterOverPlayer.Instance.SetRotation(forward);
 
@@ -178,7 +178,7 @@ public class PlayerMovement : MonoBehaviour
         // Center
         movePosition = Convert.Align(movePosition);
 
-        Debug.Log("Tweening to "+movePosition);
+        //Debug.Log("Tweening to "+movePosition);
         TweenMovement(movePosition);
                 
         SoundMaster.Instance.PlayStepSound(3);
@@ -196,13 +196,13 @@ public class PlayerMovement : MonoBehaviour
         Vector2 held = Inputs.Instance.PlayerControls.Player.Move.ReadValue<Vector2>();
 
         if (held.x == 0 && held.y == 0) return;
-        Debug.Log("Continious held input");
+        //Debug.Log("Continious held input");
         MovePlayer(held);
     }
 
     private void TweenMovement(Vector3 movement)
     {
-        Debug.Log("Performing action TRUE");
+        //Debug.Log("Performing action TRUE");
         PerformingAction = true;
 
         StartCoroutine(TweenToPosition(movement));
@@ -211,7 +211,7 @@ public class PlayerMovement : MonoBehaviour
 
         IEnumerator TweenToPosition(Vector3 forward)
         {
-            Debug.Log("TWEEN MOVEMENT");
+            //Debug.Log("TWEEN MOVEMENT");
             Vector3 startPosition = transform.position;
             Vector3 endPosition = movement;
             float tweenTime = 0.04f;
@@ -226,7 +226,7 @@ public class PlayerMovement : MonoBehaviour
             transform.position = endPosition;
             yield return new WaitForSeconds(0.1f);
             PerformingAction = false;
-            Debug.Log("Performing action FALSE");
+            //Debug.Log("Performing action FALSE");
             CheckForHold();
         }
         

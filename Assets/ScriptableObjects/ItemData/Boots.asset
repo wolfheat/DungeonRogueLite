@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: Boots
   m_EditorClassIdentifier: 
   ItemName: Basic Armor
-  EquipmentType: 2
+  EquipmentType: 4
   Picture: {fileID: 21300000, guid: 0ff56830aaef591459cee237759a029c, type: 3}
   Strength: 0
   Stamina: 4
   Intelligence: 0
   Willpower: 0
+  value: 10

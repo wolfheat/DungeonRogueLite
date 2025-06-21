@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: SwordB
   m_EditorClassIdentifier: 
   ItemName: Iron Sword
-  EquipmentType: 4
+  EquipmentType: 0
   Picture: {fileID: 21300000, guid: b2b689d7ed8675242869c56c1ff787f5, type: 3}
   Strength: 6
   Stamina: 0
   Intelligence: 0
   Willpower: 0
+  value: 10

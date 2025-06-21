@@ -62,7 +62,11 @@ June 2025
 19/6	* Added Caps for segments Up and down
 		* Hovering over enemy now targets its tile before checking floor tile
 		* Added XP gained text
+21/6	* Added Target under enemy when it is attackable
 
+
+
+		* Make attackable enemy light up, outline?
 
 		* Make continious attacking if hover over enemy with mouse button held
 

@@ -37,6 +37,10 @@ public class EquippedManager : MonoBehaviour
 		Debug.Log("Return equipped item of type "+equipmentType);
 
 		foreach (var slot in slots) {
+			if(slot == null) {
+				Debug.LogWarning("Could not find any slot item assigned. Did you forget to assign it in the equipment inspector?");
+				continue;
+			}
 			if (slot.HeldItem != null && slot.HeldItem.data.EquipmentType == equipmentType)
 				return slot.HeldItem.data;
 		}
