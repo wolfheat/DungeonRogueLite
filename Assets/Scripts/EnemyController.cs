@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Wolfheat.StartMenu;
 
 
 public interface IDamageable
@@ -9,10 +10,16 @@ public interface IDamageable
     bool TakeDamage(int damage);
 
 }
-public class EnemyController : MonoBehaviour, IDamageable
+public interface IBeingHitByArrow
+{
+    public void BeingHitByArrow(ArrowData data);
+
+}
+public class EnemyController : BaseCharacterInteract, IDamageable, IBeingHitByArrow
 {
     [SerializeField] private EnemyData data;
     [SerializeField] private IngameHealthBar healthBar;
+    [SerializeField] private EnemyAnimation enemyAnimation;
     [SerializeField] private List<ItemData> dropsItems;
 
     private LayerMask playerMask; // Include walls and player layers
@@ -39,19 +46,18 @@ public class EnemyController : MonoBehaviour, IDamageable
         // Visionmask
         visionMask = playerMask | wallMask;
 
-        //Subscribe to the tick manager
-        TickManager.TickGame += Tick;
-
         // When generated also apply the dropItems by code?
 
-
+        // Set the enemies start Tile
+        InitiateStartTileFromWorldPosition();
     }
-    private void OnDisable() => TickManager.TickGame -= Tick;
 
+    private void InitiateStartTileFromWorldPosition() => TilePosition = Convert.V3ToV2Int(transform.position);
 
     public void Tick()
     {
         //Debug.Log("Enemy "+name+" recieved tick event.");
+
         if (IsDead || Stats.Instance.IsDead || Stats.Instance.IsPaused)
             return;
         // Enemy ticks ahead one tick and attacks if ready to
@@ -65,59 +71,30 @@ public class EnemyController : MonoBehaviour, IDamageable
 
     private void DoAction()
     {
-        //Debug.Log(" Enemy "+name+" action!");
+        //Debug.Log(" Enemy "+name+" performing action!");
+
         actionTimer = data.ActionSpeed;
 
+        // Update PLayer distance
+        UpdatePlayerDistance(Convert.V3ToV2Int(PlayerMovement.Instance.transform.position));
+
         // If to far away move closer to player
+        if (EvaluateDistanceToPlayer_ReturnCanAttack()) {
+            
+            Debug.Log("Enemy attacking player! DMG:"+data.Damage);
+            // Attack Player here
+            enemyAnimation.PlayAttackAnimation();
 
-        if (EvaluateDistanceToPlayer()) {
-            //Debug.Log("Enemy attacking player! DMG:"+data.Damage);
-            Stats.Instance.TakeDamage(data.Damage);
-            // Face Player ?
         }
-
     }
 
-    private bool EvaluateDistanceToPlayer()
+    private void ChasePlayer()
     {
-        // Check distance to player - if closer than visual range and in sight start pathfinding?
+        // Close enough to chase
 
-        Vector2Int playerTile = Convert.V3ToV2Int(PlayerColliderController.Instance.transform.position);
-        //Debug.Log("Player is at "+playerTile);
-
-        Vector2Int myPosition = Convert.V3ToV2Int(transform.position);
-
-        float distance = (playerTile - myPosition).magnitude;
-
-        if(distance > data.SightDistance) {
-            //Debug.Log("Player To Far away to See");
-            return false;
-        }
-
-        //Debug.Log("Checking attack distance, "+distance+" Enemy can attack if less or equal to "+data.AttackDistance);
-        // Check if can Attack
-        if (distance <= data.AttackDistance) {
-            //Debug.Log("Can attack from here if player is visible");
-
-            // Is player visible?
-            bool playerVisible = CanSeePlayer();
-
-            if (playerVisible) {
-                //Debug.Log("Attacking Player");
-                FacePlayer();
-                return true;
-            }
-            else {
-                //Debug.Log("Player is close enough but not visible to the enemy");
-            }
-        }
-        else {
-            //Debug.Log("PLayer is to far away to be seen by enemy");
-        }
-
-        //Debug.Log("** Try To Move towards player");
+        Debug.Log("** Try To Move towards player");
         // Move towards Player
-        List<Vector2Int> path = LevelCreator.Instance.GetPath(myPosition,playerTile);
+        List<Vector2Int> path = LevelCreator.Instance.GetPath(TilePosition, PlayerMovement.Instance.TilePosition);
         //Debug.Log("** path "+path.Count);
 
         // Move enemy maxsteps towards player
@@ -129,24 +106,49 @@ public class EnemyController : MonoBehaviour, IDamageable
             // Moving towards player
             int stepsToTake = Math.Min(data.MovementSpeed, path.Count - 1);
             //Debug.Log("Enemy can take "+stepsToTake+" steps.");
-            MoveEnemy(path[stepsToTake]);   
+            MoveEnemy(path[stepsToTake]);
+        }
+    }
+
+    public float PlayerDistance { get; private set; } = 0;
+    public Vector2Int TilePosition { get; private set; }
+    public void UpdatePlayerDistance(Vector2Int playerTilePosition) => PlayerDistance = (playerTilePosition - Convert.V3ToV2Int(transform.position)).magnitude;
+
+
+
+    private bool EvaluateDistanceToPlayer_ReturnCanAttack()
+    {
+        
+        if(PlayerDistance > data.SightDistance) {
+
+            Debug.Log("Player is to far away to be seen by enemy " + name);
+
+            return false;
+        }
+
+        //Debug.Log("Enemy "+name+" are close enough to see the player. Distance "+ PlayerDistance + (PlayerDistance <= data.AttackDistance ? " = can attack.":" can not attack."));
+        
+        // Check if can Attack
+        if (PlayerDistance <= data.AttackDistance) {
+            Debug.Log("Can attack from here if player is visible");
+
+            // Is player visible?
+            if (CanSeePlayer()) {
+                //Debug.Log("Attacking Player");
+                FacePlayer();
+                return true;
+            }
+            else {
+                Debug.Log("Player is close enough but not visible to the enemy - pathfind");
+            }
+        }
+        else {
+            Debug.Log("Player is to far away to be attacked by enemy "+name+" ");
+            ChasePlayer();
+            return false;
         }
 
         return false;
-
-
-        /*
-        int cardinalDistance = Mathf.Abs(playerTile.x - myPosition.x)+Mathf.Abs(playerTile.y - myPosition.y);
-
-        Debug.Log("Distance is "+cardinalDistance);
-
-        if(cardinalDistance > 1) {
-            Vector2Int movement = GetMovementVectorTowardsPlayer(playerTile);
-            MoveEnemy(movement);
-            return true;
-        }
-        return false;
-        */
     }
 
     private bool CanSeePlayer()
@@ -155,18 +157,21 @@ public class EnemyController : MonoBehaviour, IDamageable
         Vector3 eye = transform.position + Vector3.up * 0.3f;
         Vector3 target = PlayerColliderController.Instance.transform.position + Vector3.up * 0.3f;
         Vector3 dir = (target - eye);
-        float dist = dir.magnitude;
+        float dist = dir.magnitude+0.5f;
         dir.Normalize();
 
-        Debug.DrawRay(eye, dir * dist, Color.blue);
+        Debug.DrawRay(eye, dir * dist, Color.blue,3f);
 
         if (Physics.Raycast(eye, dir, out RaycastHit hit, dist)) {
-            //Debug.Log("Hit: " + hit.collider.name + " Layer: " + LayerMask.LayerToName(hit.collider.gameObject.layer));
+            Debug.Log("Hit: " + hit.collider.name + " Layer: " + LayerMask.LayerToName(hit.collider.gameObject.layer));
             if(hit.collider.TryGetComponent(out PlayerColliderController player)) {
                 return true;
             }
         }
         else {
+            Debug.Log("FAILED TO SEE PLAYER");
+            Debug.Log("Nothing was hit by the raycast from "+eye+" to "+target);
+
             return false;
         }
         return false;
@@ -175,14 +180,9 @@ public class EnemyController : MonoBehaviour, IDamageable
 
     private void MoveEnemy(Vector2Int movement)
     {
-        //Debug.Log("Enemy Moves to " + movement);
-
-        // Check so the movement is valid
-
         transform.position = Convert.V2IntToV3(movement);
+        TilePosition = movement;
 
-        // Align Enemy to center of tile
-        transform.position = Convert.Align(transform.position);
         FacePlayer();
 
     }
@@ -263,5 +263,37 @@ public class EnemyController : MonoBehaviour, IDamageable
 
         // Give player Experience?
 
+    }
+
+    public void BeingHitByArrow(ArrowData data)
+    {
+        if (IsDead) return;
+
+        // Show being hit animation here?
+
+        // Do attack the enemy if there is one here
+        if (TakeDamage(Stats.Instance.RangeDamage)) { // Move damage into the arrow?
+            SoundMaster.Instance.PlaySound(SoundName.EnemyDie);
+            Stats.Instance.AddEnemyKilled(Data.XP);
+        }
+        else {
+            // Do animation for taking an arrow
+        }
+
+
+    }
+
+    public override void BowAttackCompleted()
+    {
+        // Send an arrow towards player here
+
+        ItemSpawner.Instance.SpawnArrow(new ArrowData(transform.position,PlayerInteract.Instance.transform.position, PlayerInteract.Instance,data.Damage));
+
+    }
+
+    public override void AnyAttackCompleted()
+    {
+        // Deal melee damage to player here
+        Stats.Instance.TakeDamage(Data.Damage);
     }
 }

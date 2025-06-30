@@ -1,20 +1,16 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Wolfheat.StartMenu;
-using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
 public class PlayerMovement : MonoBehaviour
 {
-
     public static PlayerMovement Instance { get; private set; }
 
     private Vector3 forward = Vector3.forward;
     private int rotation = 0;
     [SerializeField] private LayerMask enemyLayer; 
 
-    public bool PerformingAction { get; set; } = false;
 
     private void Awake()
     {
@@ -23,15 +19,6 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
         Instance = this;
-        PerformingAction = false;
-    }
-
-    private void Start()
-    {
-        Inputs.Instance.PlayerControls.Player.Move.performed += Move;
-        Inputs.Instance.PlayerControls.Player.Turn.performed += Turn;
-        //Inputs.Instance.PlayerControls.Player.SideStep.performed += SideStep;
-
     }
 
     public IEnumerator ReturnToStartPosition()
@@ -41,13 +28,6 @@ public class PlayerMovement : MonoBehaviour
 
         Debug.Log("Setting player to startposition at "+ LevelCreator.Instance.StartPosition);
 
-    }
-
-    private void OnDisable()
-    {
-        Inputs.Instance.PlayerControls.Player.Move.performed -= Move;
-        Inputs.Instance.PlayerControls.Player.Turn.performed -= Turn;
-       // Inputs.Instance.PlayerControls.Player.SideStep.performed -= SideStep;        
     }
 
     private void Update() => LookAtMouse();
@@ -100,18 +80,12 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
-    private void Turn(InputAction.CallbackContext context)
-    {
-        TurnPlayer(context.ReadValue<float>());
-    }
-
     public void Reset()
     {
         //Debug.Log("** Resetting player **");
         StopAllCoroutines();
         forward = Vector3.forward;
         rotation = 0;
-        PerformingAction = false;
 
         // Instantly set player position
         //Debug.Log("** Setting Player position instantly **");
@@ -119,12 +93,12 @@ public class PlayerMovement : MonoBehaviour
 
         CenterOverPlayer.Instance.ResetToPosition(transform.position);
     }
-    private void TurnPlayer(float v)
+    public bool TryTurnPlayer(float turn)
     {
         //Debug.Log("** Turning Player rotationIndex was "+rotation);
 
         // Rotate here
-        rotation = (rotation +(v > 0 ? 1 : 3)) % 4;
+        rotation = (rotation +(turn > 0 ? 1 : 3)) % 4;
         //Debug.Log("** Forward index becomes" + rotation);
 
         forward = rotation switch
@@ -139,79 +113,51 @@ public class PlayerMovement : MonoBehaviour
 
         CenterOverPlayer.Instance.SetRotation(forward);
 
-        //transform.rotation = Quaternion.LookRotation(transform.right*v);
-        //transform.rotation = Quaternion.LookRotation(transform.right*v,Vector3.up);
+        return true;
     }
 
-    private void Move(InputAction.CallbackContext context)
+    public bool TryMovePlayer(Vector2Int move)
     {
-        if (Stats.Instance.IsDead || Stats.Instance.IsPaused) return;
-        
-        
-        if (PerformingAction) return;
-        
-        //Debug.Log("Player Moving "+context.action.ReadValue<Vector2>());
-        MovePlayer(context.action.ReadValue<Vector2>());
-    }
-
-    private void MovePlayer(Vector2 vector2)
-    {
-        vector2 = new Vector2(Math.Sign((int)vector2.x), Math.Sign((int)vector2.y));
-
-        Transform camera = CenterOverPlayer.Instance.transform;
-
-
-        Vector3 movement = camera.forward * vector2.y + camera.right * vector2.x;
-        
-
-        // Instant movement to position
-
-        Vector3 movePosition = transform.position + movement;
+        // Get the resulting world position after the move
+        Vector3 newPosition = GetMovementsNewPosition(move);
 
         // Check if move is legal
-        bool legal = PlayerColliderController.Instance.CheckIfLegalMoveTo(movePosition);
+        if (!PlayerColliderController.Instance.CheckIfLegalMoveTo(newPosition)) 
+            return false;
 
-        if (!legal) {
-            return;
-        }
+        PlayerActionHandeler.Instance.PerformingAction = true;
 
-        // Center
-        movePosition = Convert.Align(movePosition);
+        TilePosition = Convert.V3ToV2Int(newPosition);
 
-        //Debug.Log("Tweening to "+movePosition);
-        TweenMovement(movePosition);
-                
+        TweenMovement(newPosition);
+
         SoundMaster.Instance.PlayStepSound(3);
-
-        // Have player action end call a tick
-        TickManager.Instance.TickRequest();
-
-
+        return true;
     }
 
-    private void CheckForHold()
+    private Vector3 GetMovementsNewPosition(Vector2Int move)
     {
-        if (PerformingAction) return;
+        Transform camera = CenterOverPlayer.Instance.transform;
+        Vector3 movementFromCameraPOV = camera.forward * move.y + camera.right * move.x;
 
-        Vector2 held = Inputs.Instance.PlayerControls.Player.Move.ReadValue<Vector2>();
-
-        if (held.x == 0 && held.y == 0) return;
-        //Debug.Log("Continious held input");
-        MovePlayer(held);
+        // Instant movement to position and center
+        return Convert.Align(transform.position + movementFromCameraPOV);
     }
 
+    public Vector2Int TilePosition { get; private set; }
     private void TweenMovement(Vector3 movement)
     {
-        //Debug.Log("Performing action TRUE");
-        PerformingAction = true;
-
         StartCoroutine(TweenToPosition(movement));
 
         //transform.rotation = Quaternion.LookRotation(forward, Vector3.up);
 
         IEnumerator TweenToPosition(Vector3 forward)
         {
-            //Debug.Log("TWEEN MOVEMENT");
+
+            int random = UnityEngine.Random.Range(0, 10000);
+            //Debug.Log("Performing action TRUE");
+            Debug.Log("TWEEN MOVEMENT - STARTED "+random);
+
             Vector3 startPosition = transform.position;
             Vector3 endPosition = movement;
             float tweenTime = 0.04f;
@@ -225,15 +171,11 @@ public class PlayerMovement : MonoBehaviour
             }
             transform.position = endPosition;
             yield return new WaitForSeconds(0.1f);
-            PerformingAction = false;
-            //Debug.Log("Performing action FALSE");
-            CheckForHold();
+
+            Debug.Log("TWEEN MOVEMENT - ENDED" + random);
+
+            PlayerActionHandeler.Instance.EndPlayerTurn();
         }
-        
     }
 
-    private void SideStep(InputAction.CallbackContext context)
-    {
-        Debug.Log("Player SideStep "+context.action.ReadValue<float>());
-    }
 }

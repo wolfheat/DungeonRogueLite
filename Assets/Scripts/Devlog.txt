@@ -63,12 +63,16 @@ June 2025
 		* Hovering over enemy now targets its tile before checking floor tile
 		* Added XP gained text
 21/6	* Added Target under enemy when it is attackable
+		* Fixed som player animations for legged player
+22/6	* Added some Enemy animations
+
+30/6	* Fixed attack order with Tickmanager
 
 
+
+		* Working on reworking inputs and actions executions.
 
 		* Make attackable enemy light up, outline?
-
-		* Make continious attacking if hover over enemy with mouse button held
 
 		* Add projectile and holding bow and sword animation
 		

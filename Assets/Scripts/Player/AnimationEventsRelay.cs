@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class AnimationEventsRelay : MonoBehaviour
 {
-    [SerializeField] PlayerInteract playerInteract;
+    [SerializeField] BaseCharacterInteract characterInteractRelay;
 
-    public void AttackCompleted() => playerInteract.AnyAttackCompleted();
+    public void AttackCompleted() => characterInteractRelay.AnyAttackCompleted();
+    public void BowAttackCompleted() => characterInteractRelay.BowAttackCompleted();
 }

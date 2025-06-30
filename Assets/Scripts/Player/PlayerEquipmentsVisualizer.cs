@@ -1,7 +1,5 @@
 using UnityEngine;
 
-
-
 public enum EquipMentType{Sword,Bow}
 public class PlayerEquipmentsVisualizer : MonoBehaviour
 {

@@ -2,11 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class TickManager : MonoBehaviour
 {
-
     private int currentTick = 0;
     private TickBox[] tickBoxes;
     [SerializeField] private int TotalTicks = 10; 
@@ -25,17 +23,26 @@ public class TickManager : MonoBehaviour
         Instance = this;
     }
 
-
     void Start()
     {
         GenerateTickBoxes();
+    }
 
-        Inputs.Instance.PlayerControls.Player.Space.performed += TickRequested;
+    List<EnemyController> activeEnemies = new List<EnemyController>();
 
+    public void RemoveEnemyDoingAction(EnemyController enemy)
+    {
+        if(activeEnemies.Contains(enemy))
+            activeEnemies.Remove(enemy);
+
+        if (activeEnemies.Count == 0)
+            PlayerActionHandeler.Instance.StartPlayerTurn();
     }
 
     public void TickRequest()
     {
+        Debug.Log("** TICK REQUEST");
+
         // DelayTick one frame?
         StartCoroutine(DelayTick());
     }
@@ -44,11 +51,10 @@ public class TickManager : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(Time.fixedDeltaTime);
         //yield return new WaitForSeconds(0.05f);
+        Debug.Log("** TICK");
         Tick();
         TickGame?.Invoke();
     }
-
-    private void TickRequested(InputAction.CallbackContext context) => TickRequest();
 
     private void GenerateTickBoxes()
     {
@@ -85,4 +91,9 @@ public class TickManager : MonoBehaviour
         tickBoxes[currentTick].SetActive(true);
     }
 
+    internal void EndEnemyTicks()
+    {
+        Debug.Log("Ended Enemy turns - let player take over");
+        PlayerActionHandeler.Instance.StartPlayerTurn();
+    }
 }

@@ -3,14 +3,14 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Wolfheat.StartMenu;
 
-public class PlayerInteract : MonoBehaviour
+public class PlayerInteract : BaseCharacterInteract, IBeingHitByArrow
 {
-    [SerializeField] private TargetSelection tileSelector;
     [SerializeField] private LayerMask enemyLayerMask;
     [SerializeField] private GameObject overlapBoxShow;
 
     private Vector3 overlapExtent = new Vector3(0.5f, 0.5f, 0.5f);
 
+    private ArrowData arrowData;
     public static PlayerInteract Instance { get; private set; }
 
     private void Awake()
@@ -22,47 +22,29 @@ public class PlayerInteract : MonoBehaviour
         Instance = this;
     }
 
-    private void Start()
+    public override void BowAttackCompleted()
     {
-        Inputs.Instance.PlayerControls.Player.Click.performed += OnPlayerClick;
+        // Send away the arrow
+        Debug.Log("Sending of an arrow");
+        if(arrowData != null)
+            ItemSpawner.Instance.SpawnArrow(arrowData);
+
+        PlayerActionHandeler.Instance.EndPlayerTurn();
+    }
+    public override void AnyAttackCompleted()
+    {
+        PlayerActionHandeler.Instance.EndPlayerTurn();
     }
 
-    public void AnyAttackCompleted()
-    {
-        PlayerMovement.Instance.PerformingAction = false;
-        //Debug.Log("Performing action Click FALSE");
-
-        // Check if player is holding the attack?
-        if (Inputs.Instance.PlayerControls.Player.Click.ReadValue<float>() != 0) {
-            //Debug.Log("Player Is holding mouse attack");
-            OnPlayerClick();
-        }
-    }
-
-    private void Update()
-    {
-        if (Stats.Instance.IsDead) return;
-        if (PlayerMovement.Instance.PerformingAction) return;
-
-        //Debug.Log("alive and not performin an action");
-        // No action is performed check for held mouse button
-        if (Inputs.Instance.PlayerControls.Player.Click.ReadValue<float>() != 0) {
-            //Debug.Log("Mouse held - in Update");
-            OnPlayerClick();
-        }
-    }
-
-    private void OnPlayerClick(InputAction.CallbackContext context) => OnPlayerClick();
-
-    public bool IsAttackable()
+    public bool IsAttackable(Vector3 selectorPosition)
     {
         if (Stats.Instance.IsDead) return false;
         //if (PlayerMovement.Instance.PerformingAction) return false;
 
-        float directDistance = (transform.position - tileSelector.transform.position).magnitude;
+        float directDistance = (transform.position - selectorPosition).magnitude;
 
         // Get Enemy at this position
-        Collider[] colliders = Physics.OverlapBox(tileSelector.transform.position, overlapExtent, Quaternion.identity, enemyLayerMask);
+        Collider[] colliders = Physics.OverlapBox(selectorPosition, overlapExtent, Quaternion.identity, enemyLayerMask);
 
         EnemyController enemy = colliders.Where(x => x.GetComponent<EnemyController>() != null).FirstOrDefault()?.GetComponent<EnemyController>();
 
@@ -78,31 +60,30 @@ public class PlayerInteract : MonoBehaviour
         return false;
     }
 
-    private void OnPlayerClick()
+    public bool TryAttack(Vector3 selectorPosition)
     {
-        if (Stats.Instance.IsDead) return;
-        if (PlayerMovement.Instance.PerformingAction) return;
+        if (Stats.Instance.IsDead) return false;
 
-        //Debug.Log("Selector is at " + Convert.V3ToV2Int(tileSelector.transform.position));
+        //Debug.Log("Selector is at " + Convert.V3ToV2Int(selectorPosition.position));
 
-        float distanceX = Mathf.Abs(transform.position.x-tileSelector.transform.position.x);
-        float distanceY = Mathf.Abs(transform.position.z-tileSelector.transform.position.z);
+        float distanceX = Mathf.Abs(transform.position.x - selectorPosition.x);
+        float distanceY = Mathf.Abs(transform.position.z-selectorPosition.z);
         int totDistance = Mathf.RoundToInt(distanceX+distanceY);
         float directDistance = Mathf.Sqrt(distanceX*distanceX+distanceY*distanceY);
 
         // Get Enemy at this position
-        Collider[] colliders = Physics.OverlapBox(tileSelector.transform.position, overlapExtent, Quaternion.identity, enemyLayerMask);
+        Collider[] colliders = Physics.OverlapBox(selectorPosition, overlapExtent, Quaternion.identity, enemyLayerMask);
 
         // Show the colliderbox
         overlapBoxShow.SetActive(true);
-        overlapBoxShow.transform.position = tileSelector.transform.position;
+        overlapBoxShow.transform.position = selectorPosition;
 
         EnemyController enemy = colliders.Where(x => x.GetComponent<EnemyController>() != null).FirstOrDefault()?.GetComponent<EnemyController>();
 
-        //Debug.Log("Selector is at " + tileSelector.transform.position+" distance = "+directDistance+" enemy = "+enemy);
+        //Debug.Log("Selector is at " + selectorPosition.position+" distance = "+directDistance+" enemy = "+enemy);
 
         if (enemy == null || enemy.IsDead) {
-            return;
+            return false;
         }
 
         if(directDistance < Stats.Instance.BowReach && directDistance > 1.5) {
@@ -110,32 +91,16 @@ public class PlayerInteract : MonoBehaviour
             if (EquippedManager.Instance.EquippedRangedWeapon()) {
                 Debug.Log("Bow Attack");
                 
-                // Start Attacking
-                PlayerMovement.Instance.PerformingAction = true;
-                //Debug.Log("Performing action Click TRUE");
+                SetArrowData(transform.position, enemy.transform.position, enemy, Stats.Instance.RangeDamage);
+
                 PlayerAnimation.Instance.PlayAnimation(AnimationType.AttackBow);
 
-                // Do attack the enemy if there is one here
-                if (enemy.TakeDamage(Stats.Instance.RangeDamage)) {
-                    SoundMaster.Instance.PlaySound(SoundName.EnemyDie);
-                    Stats.Instance.AddEnemyKilled(enemy.Data.XP);
-                }
-                else {
-
-                    // Change this to sound for ranged damage
-                    SoundMaster.Instance.PlayWeaponHitEnemy();
-                }
-
-                // Have player action end call a tick
-                TickManager.Instance.TickRequest();
             }
         }
         else if(directDistance <= Stats.Instance.SwordReach) {
 
             Debug.Log("Melee Attack");
 
-            // Start Attacking
-            PlayerMovement.Instance.PerformingAction = true;
             //Debug.Log("Performing action Click TRUE"); 
             PlayerAnimation.Instance.PlayAnimation(AnimationType.Attack1hThrust);
 
@@ -147,12 +112,20 @@ public class PlayerInteract : MonoBehaviour
             else
                 SoundMaster.Instance.PlayWeaponHitEnemy();
 
-            // Have player action end call a tick
-            TickManager.Instance.TickRequest();
+            return true; // Attack was allowed, end players turn
         }
         else {
-            Debug.Log("To far to Attack");            
+            Debug.Log("To far to Attack");
         }
+        return false;
+    }
 
+
+    private void SetArrowData(Vector3 position1, Vector3 position2, IBeingHitByArrow target, int damage) => arrowData = new ArrowData(position1, position2, target, damage);
+
+    public void BeingHitByArrow(ArrowData data)
+    {
+        Stats.Instance.TakeDamage(data.Damage);        
     }
 }
+

@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: SkeletonArcher
   m_EditorClassIdentifier: 
   MaxHealth: 25
+  XP: 15
   Damage: 5
   MovementSpeed: 2
-  SightDistance: 7
+  SightDistance: 9
   AttackSpeed: 1
   ActionSpeed: 3
-  AttackDistance: 5
-  XP: 15
+  AttackDistance: 6

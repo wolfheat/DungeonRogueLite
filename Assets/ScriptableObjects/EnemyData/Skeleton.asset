@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: Skeleton
   m_EditorClassIdentifier: 
   MaxHealth: 100
+  XP: 10
   Damage: 1
   MovementSpeed: 2
-  SightDistance: 7
+  SightDistance: 9
   AttackSpeed: 1
   ActionSpeed: 1
   AttackDistance: 1.55

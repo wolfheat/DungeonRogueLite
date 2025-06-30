@@ -388,7 +388,6 @@ public class LevelCreator : MonoBehaviour
         from -= offset;
         to -= offset;
 
-        Debug.Log("** From "+from+" to "+to);
 
         int[,] levelCopy = (int[,])level.Clone();
 
@@ -402,6 +401,7 @@ public class LevelCreator : MonoBehaviour
         activeNodes.Add(from);
         List<Vector2Int> answer = WalkPath(from, to, new List<Vector2Int>(), 0);
 
+        Debug.Log("** Getting path from "+from+" to "+to+" ["+answer.Count+"]");
         //LogWalk(answer);
 
 

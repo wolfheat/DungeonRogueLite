@@ -4,7 +4,12 @@ using UnityEngine;
 
 public enum AnimationType{Idle, Attack1hThrust, AttackBow, Attack1h}
 
-public class PlayerAnimation : MonoBehaviour
+public interface IAnimateCharacter
+{
+    public void PlayAnimation(AnimationType type);
+}
+
+public class PlayerAnimation : MonoBehaviour, IAnimateCharacter
 {
     [SerializeField] private Animator animator;
 
@@ -40,7 +45,7 @@ public class PlayerAnimation : MonoBehaviour
         }
 
         string animation = type.ToString();
-        Debug.Log("PLayer animation: "+animation);
+        //Debug.Log("PLayer animation: "+animation);
         animator.CrossFade(animation,0.1f);
     }
 

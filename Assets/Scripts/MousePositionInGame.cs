@@ -17,7 +17,8 @@ public class MousePositionInGame : MonoBehaviour
     private void Update()
     {
 		// Figure out if enemy is reachable and attackable from this position
-		bool canAttackFromHere = PlayerInteract.Instance.IsAttackable();
+		bool canAttackFromHere = PlayerInteract.Instance.IsAttackable(transform.position);
+
 
         tileShower.SetSelector(new Vector3(Mathf.RoundToInt(transform.position.x), 0.05f, Mathf.RoundToInt(transform.position.z)), canAttackFromHere);
     }
