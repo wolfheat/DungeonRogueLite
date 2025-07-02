@@ -67,7 +67,7 @@ June 2025
 22/6	* Added some Enemy animations
 
 30/6	* Fixed attack order with Tickmanager
-
+1/7		* Added debug panel
 
 
 		* Working on reworking inputs and actions executions.

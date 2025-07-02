@@ -152,6 +152,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""F5"",
+                    ""type"": ""Button"",
+                    ""id"": ""bb1c08e2-2456-4a9b-9c2f-d2b512de3e61"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -748,6 +757,28 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""P"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9c44b91e-e7b2-4e82-829e-1530be24317a"",
+                    ""path"": ""<Keyboard>/f5"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""F5"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2c33f14c-8931-4069-b7bc-eff42c6eee34"",
+                    ""path"": ""<Keyboard>/backquote"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""F5"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -770,6 +801,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Player_Three = m_Player.FindAction("Three", throwIfNotFound: true);
         m_Player_Four = m_Player.FindAction("Four", throwIfNotFound: true);
         m_Player_P = m_Player.FindAction("P", throwIfNotFound: true);
+        m_Player_F5 = m_Player.FindAction("F5", throwIfNotFound: true);
     }
 
     ~@PlayerControls()
@@ -850,6 +882,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Three;
     private readonly InputAction m_Player_Four;
     private readonly InputAction m_Player_P;
+    private readonly InputAction m_Player_F5;
     public struct PlayerActions
     {
         private @PlayerControls m_Wrapper;
@@ -868,6 +901,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @Three => m_Wrapper.m_Player_Three;
         public InputAction @Four => m_Wrapper.m_Player_Four;
         public InputAction @P => m_Wrapper.m_Player_P;
+        public InputAction @F5 => m_Wrapper.m_Player_F5;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -919,6 +953,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @P.started += instance.OnP;
             @P.performed += instance.OnP;
             @P.canceled += instance.OnP;
+            @F5.started += instance.OnF5;
+            @F5.performed += instance.OnF5;
+            @F5.canceled += instance.OnF5;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -965,6 +1002,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @P.started -= instance.OnP;
             @P.performed -= instance.OnP;
             @P.canceled -= instance.OnP;
+            @F5.started -= instance.OnF5;
+            @F5.performed -= instance.OnF5;
+            @F5.canceled -= instance.OnF5;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -998,5 +1038,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnThree(InputAction.CallbackContext context);
         void OnFour(InputAction.CallbackContext context);
         void OnP(InputAction.CallbackContext context);
+        void OnF5(InputAction.CallbackContext context);
     }
 }

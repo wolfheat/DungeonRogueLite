@@ -183,6 +183,9 @@ public class EnemyController : BaseCharacterInteract, IDamageable, IBeingHitByAr
         transform.position = Convert.V2IntToV3(movement);
         TilePosition = movement;
 
+
+        DebugPanel.Instance.AddDebugText("Enemy " + name + " Moved to "+movement);
+
         FacePlayer();
 
     }
@@ -286,14 +289,13 @@ public class EnemyController : BaseCharacterInteract, IDamageable, IBeingHitByAr
     public override void BowAttackCompleted()
     {
         // Send an arrow towards player here
-
         ItemSpawner.Instance.SpawnArrow(new ArrowData(transform.position,PlayerInteract.Instance.transform.position, PlayerInteract.Instance,data.Damage));
-
     }
 
     public override void AnyAttackCompleted()
     {
         // Deal melee damage to player here
         Stats.Instance.TakeDamage(Data.Damage);
+        DebugPanel.Instance.AddDebugText("Enemy "+name+" Completed its attack.");
     }
 }
