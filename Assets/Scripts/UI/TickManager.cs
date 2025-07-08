@@ -10,6 +10,10 @@ public class TickManager : MonoBehaviour
     [SerializeField] private int TotalTicks = 10; 
     [SerializeField] private TickBox tickBoxPrefab;
 
+
+    List<EnemyController> activeEnemies = new List<EnemyController>();
+    List<Arrow> activeArrows = new List<Arrow>();
+
     public static TickManager Instance { get; private set; }
 
     public static Action TickGame;
@@ -28,32 +32,51 @@ public class TickManager : MonoBehaviour
         GenerateTickBoxes();
     }
 
-    List<EnemyController> activeEnemies = new List<EnemyController>();
+    public void SubscribeEnemy(EnemyController enemy)
+    {
+        if (!activeEnemies.Contains(enemy)) {
+            activeEnemies.Add(enemy);
+            Debug.Log("Subscribed enemy ["+activeEnemies.Count+"]");
+        }
+    }
+    
+    public void SubscribeArrow(Arrow arrow)
+    {
+        if (activeArrows.Contains(arrow)) {
+            activeArrows.Add(arrow);
+            Debug.Log("Subscribed arrow ["+activeArrows.Count+"]");
+        }
+    }
+    public void CheckForSubscriptions()
+    {
+        CheckForGivingPlayerTheTurn();
+    }
 
     public void RemoveEnemyDoingAction(EnemyController enemy)
     {
-        if(activeEnemies.Contains(enemy))
+        if (activeEnemies.Contains(enemy)) {
             activeEnemies.Remove(enemy);
+            Debug.Log("Un-Subscribed enemy [" + activeEnemies.Count + "]");
+        }
 
-        if (activeEnemies.Count == 0)
+        CheckForGivingPlayerTheTurn();
+    }
+    
+    public void RemoveArrowDoingAction(Arrow arrow)
+    {
+        if (activeArrows.Contains(arrow)) {
+            activeArrows.Remove(arrow);
+            Debug.Log("Un-Subscribed arrow [" + activeArrows.Count + "]");
+        }
+        CheckForGivingPlayerTheTurn();
+    }
+
+    private void CheckForGivingPlayerTheTurn()
+    {
+        if (activeEnemies.Count == 0 && activeArrows.Count == 0) {
+            Debug.Log("No Enemies or arrows in tickmaster - let player have the turn");
             PlayerActionHandeler.Instance.StartPlayerTurn();
-    }
-
-    public void TickRequest()
-    {
-        Debug.Log("** TICK REQUEST");
-
-        // DelayTick one frame?
-        StartCoroutine(DelayTick());
-    }
-
-    private IEnumerator DelayTick()
-    {
-        yield return new WaitForSecondsRealtime(Time.fixedDeltaTime);
-        //yield return new WaitForSeconds(0.05f);
-        Debug.Log("** TICK");
-        Tick();
-        TickGame?.Invoke();
+        }
     }
 
     private void GenerateTickBoxes()

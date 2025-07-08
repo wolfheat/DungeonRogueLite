@@ -75,6 +75,8 @@ public class ItemSpawner : MonoBehaviour
     }
     internal void RemoveArrow(Arrow arrow)
     {
+        TickManager.Instance.RemoveArrowDoingAction(arrow);
+
         Debug.Log("Destroying the arrow");
         Destroy(arrow.gameObject);
     }
@@ -83,8 +85,9 @@ public class ItemSpawner : MonoBehaviour
     {
         Arrow arrow = Instantiate(arrowPrefab,bulletsHolder);
         arrow.ShootArrow(data);
+        TickManager.Instance.SubscribeArrow(arrow);
     }
-    
+
     internal void SpawnEnemy(int enemyType, Vector2Int pos)
     {
         //Debug.Log("Spawning enemy " + enemyType + ".");

@@ -175,6 +175,9 @@ public class PlayerMovement : MonoBehaviour
             Debug.Log("TWEEN MOVEMENT - ENDED" + random);
 
             PlayerActionHandeler.Instance.EndPlayerTurn();
+
+
+            
         }
     }
 

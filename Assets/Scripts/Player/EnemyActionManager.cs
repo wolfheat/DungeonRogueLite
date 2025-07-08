@@ -22,26 +22,32 @@ public class EnemyActionManager : MonoBehaviour
 
     private void Tick()
     {
-		Debug.Log("Handle all enemies actions");
+        Debug.Log("Handle all enemies actions");
 
-		// Have a list of all enemies
-		// Order them after distance from player
+        // Have a list of all enemies
+        // Order them after distance from player
 
-		List<EnemyController> enemies = transform.GetComponentsInChildren<EnemyController>().OrderBy(x => x.PlayerDistance).ToList();
+        List<EnemyController> enemies = transform.GetComponentsInChildren<EnemyController>().OrderBy(x => x.PlayerDistance).ToList();
 
-		Debug.Log("The enemies are ordered");
-		StringBuilder sb = new StringBuilder("Enemies: ");
-		foreach (EnemyController enemy in enemies) {
-			sb.Append(enemy.PlayerDistance+",");
-		}
-		Debug.Log(sb.ToString());
+        PrintEnemiesDistances(enemies);
 
-		Debug.Log("NOW TICK ALL ENEMIES");
-		foreach (EnemyController enemy in enemies) {
-			enemy.Tick();
-		}
-		Debug.Log("ENEMIES Ticks Completed");
-		TickManager.Instance.EndEnemyTicks();
+        Debug.Log("NOW TICK ALL ENEMIES");
+        foreach (EnemyController enemy in enemies) {
+            enemy.Tick();
+        }
+
+        DebugPanel.Instance.AddDebugText("All ENEMIES Ticks dispatched");
+
+        Debug.Log("ENEMIES Ticks Completed");        
     }
 
+    private static void PrintEnemiesDistances(List<EnemyController> enemies)
+    {
+        Debug.Log("The enemies are ordered");
+        StringBuilder sb = new StringBuilder("Enemies: ");
+        foreach (EnemyController enemy in enemies) {
+            sb.Append(enemy.PlayerDistance + ",");
+        }
+        Debug.Log(sb.ToString());
+    }
 }

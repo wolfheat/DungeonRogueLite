@@ -38,6 +38,8 @@ public class LevelCreator : MonoBehaviour
     [SerializeField] private LayerMask wallMask;
     [SerializeField] private LayerMask enemyMask;
 
+    [Header("Enemies")]
+    [SerializeField] private int enemiesToCreate = 1;
 
 
     private int[,] level;
@@ -243,8 +245,8 @@ public class LevelCreator : MonoBehaviour
 
 
         // Enemies placed
-        PlaceEnemies(10,0);
-        PlaceEnemies(10,1);
+        PlaceEnemies(enemiesToCreate,0);
+        //PlaceEnemies(10,1);
 
 
         //PrintLevel();

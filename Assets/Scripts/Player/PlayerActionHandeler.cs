@@ -77,12 +77,13 @@ public class PlayerActionHandeler : MonoBehaviour
             // Execute this action
             switch (StoredAction.actionType) {
                 case ActionType.Movement:
-                    if (!PlayerMovement.Instance.TryMovePlayer(StoredAction.movement))
-                        AllowReadingStoredPlayerInput = true; // re-allow reading stored input
+                    if (!PlayerMovement.Instance.TryMovePlayer(StoredAction.movement)) {
+                        DebugPanel.Instance.AddDebugText("Player movement blocked.");
+                        AllowReadingStoredPlayerInput = true; // re-allow reading stored input if not able to move
+                    }
                     break;
                 case ActionType.Turn:
-                    PlayerMovement.Instance.TryTurnPlayer(StoredAction.turn); // Currently always allowed, also wont take action since not calling end turn
-                    
+                    PlayerMovement.Instance.TryTurnPlayer(StoredAction.turn); // Currently always allowed, also wont take action since not calling end turn                    
                     AllowReadingStoredPlayerInput = true; // re-allow reading stored input
 
                     break;
@@ -99,13 +100,15 @@ public class PlayerActionHandeler : MonoBehaviour
 
     internal void StartPlayerTurn()
     {
-        Debug.Log("Start PLayers Turn");
+        Debug.Log("Start Players Turn");
         AllowReadingStoredPlayerInput = true;
     }
 
     internal void EndPlayerTurn()
     {
         PerformingAction = false;
+        AllowReadingStoredPlayerInput = true; // re-allow reading stored input if not able to move
+        DebugPanel.Instance.AddDebugText("Ended players turn - allow read new input");
 
         Debug.Log("Player turn ended");
         // Have all enemies do their turns

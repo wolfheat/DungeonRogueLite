@@ -64,6 +64,7 @@ public class EnemyController : BaseCharacterInteract, IDamageable, IBeingHitByAr
         actionTimer--;
 
         if (actionTimer <= 0) {
+            TickManager.Instance.SubscribeEnemy(this);
             DoAction();
         }
 
@@ -84,7 +85,6 @@ public class EnemyController : BaseCharacterInteract, IDamageable, IBeingHitByAr
             Debug.Log("Enemy attacking player! DMG:"+data.Damage);
             // Attack Player here
             enemyAnimation.PlayAttackAnimation();
-
         }
     }
 
@@ -123,6 +123,7 @@ public class EnemyController : BaseCharacterInteract, IDamageable, IBeingHitByAr
 
             Debug.Log("Player is to far away to be seen by enemy " + name);
 
+            TickManager.Instance.RemoveEnemyDoingAction(this);
             return false;
         }
 
@@ -140,6 +141,7 @@ public class EnemyController : BaseCharacterInteract, IDamageable, IBeingHitByAr
             }
             else {
                 Debug.Log("Player is close enough but not visible to the enemy - pathfind");
+                TickManager.Instance.RemoveEnemyDoingAction(this);
             }
         }
         else {
@@ -147,7 +149,7 @@ public class EnemyController : BaseCharacterInteract, IDamageable, IBeingHitByAr
             ChasePlayer();
             return false;
         }
-
+        TickManager.Instance.RemoveEnemyDoingAction(this);
         return false;
     }
 
@@ -186,8 +188,11 @@ public class EnemyController : BaseCharacterInteract, IDamageable, IBeingHitByAr
 
         DebugPanel.Instance.AddDebugText("Enemy " + name + " Moved to "+movement);
 
-        FacePlayer();
+        // End Enemy Turn
 
+        FacePlayer();
+        Debug.Log("Enemy move completed");
+        TickManager.Instance.RemoveEnemyDoingAction(this);
     }
 
     private void FacePlayer()
@@ -290,6 +295,9 @@ public class EnemyController : BaseCharacterInteract, IDamageable, IBeingHitByAr
     {
         // Send an arrow towards player here
         ItemSpawner.Instance.SpawnArrow(new ArrowData(transform.position,PlayerInteract.Instance.transform.position, PlayerInteract.Instance,data.Damage));
+
+        TickManager.Instance.RemoveEnemyDoingAction(this);
+
     }
 
     public override void AnyAttackCompleted()
@@ -297,5 +305,6 @@ public class EnemyController : BaseCharacterInteract, IDamageable, IBeingHitByAr
         // Deal melee damage to player here
         Stats.Instance.TakeDamage(Data.Damage);
         DebugPanel.Instance.AddDebugText("Enemy "+name+" Completed its attack.");
+        TickManager.Instance.RemoveEnemyDoingAction(this);
     }
 }

@@ -68,7 +68,7 @@ June 2025
 
 30/6	* Fixed attack order with Tickmanager
 1/7		* Added debug panel
-
+8/7		* Fixed some of the registration for arrows and enemies
 
 		* Working on reworking inputs and actions executions.
 
